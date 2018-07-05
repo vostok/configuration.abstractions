@@ -1,0 +1,16 @@
+sdk *default:
+  build:
+    target: Vostok.Configuration.Abstractions.sln
+    configuration: NoTests
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.Configuration.Abstractions/bin/Release/netstandard2.0/Vostok.Configuration.Abstractions.dll
+
+  deps:
+
+full-build > sdk:
+  build:
+    target: Vostok.Configuration.Abstractions.sln
+    configuration: Release

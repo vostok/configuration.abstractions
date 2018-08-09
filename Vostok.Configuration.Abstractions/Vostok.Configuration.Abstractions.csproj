@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\vostok.devtools\library-common-props\Main-Project.props" />
   <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <LangVersion>7.2</LangVersion>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -18,17 +16,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <FileVersion>$(Version)</FileVersion>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
-    <PackageVersion>$(Version)</PackageVersion>
     <PackageReleaseNotes>TODO</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Authors>Vostok team</Authors>
-    <Company>SKB Kontur</Company>
-    <Product>Vostok</Product>
-    <Copyright>Copyright (c) 2017-2018 SKB Kontur</Copyright>
     <Title>Vostok configuration abstractions library</Title>
     <Description>Configuration abstractions library for microservice toolkit http://vostok.tools/</Description>
   </PropertyGroup>
@@ -36,9 +27,7 @@
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/configuration.abstractions</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/configuration.abstractions/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>vostok vostok.configuration.abstractions</PackageTags>
     <RepositoryUrl>https://github.com/vostok/configuration.abstractions</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 </Project>

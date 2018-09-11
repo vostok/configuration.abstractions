@@ -1,8 +1,11 @@
-﻿namespace Vostok.Configuration.Abstractions.MergeOptions
+﻿using JetBrains.Annotations;
+
+namespace Vostok.Configuration.Abstractions.MergeOptions
 {
     /// <summary>
     /// Specifies the way object nodes are merged.
     /// </summary>
+    [PublicAPI]
     public enum ObjectMergeStyle
     {
         /// <summary>

@@ -8,6 +8,7 @@ namespace Vostok.Configuration.Abstractions.Validation
     internal class SettingsValidationErrors : ISettingsValidationErrors
     {
         private readonly List<string> errors = new List<string>();
+
         public string Prefix { get; set; }
 
         public bool HasErrors => errors.Any();

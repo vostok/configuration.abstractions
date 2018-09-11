@@ -7,6 +7,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     /// <summary>
     /// Represents a tree of raw settings. 'Raw' means that all values are stored as strings.
     /// </summary>
+    [PublicAPI]
     public interface ISettingsNode
     {
         /// <summary>
@@ -34,7 +35,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         ISettingsNode this[string name] { get; }
 
         /// <summary>
-        /// Merge two settings trees by rules specified in <paramref name="options"/>.
+        /// Merges two settings trees by rules specified in <paramref name="options"/>.
         /// </summary>
         ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null);
     }

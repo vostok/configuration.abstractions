@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions
@@ -6,6 +7,7 @@ namespace Vostok.Configuration.Abstractions
     /// <summary>
     /// Provides configuration in the form of raw settings trees.
     /// </summary>
+    [PublicAPI]
     public interface IConfigurationSource
     {
         /// <summary>

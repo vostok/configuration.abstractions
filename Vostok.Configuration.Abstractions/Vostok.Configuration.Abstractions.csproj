@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
+  
   <Import Project="..\..\vostok.devtools\library-common-props\Main-Project.props" />
   <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
 
@@ -12,23 +12,18 @@
 
   <PropertyGroup>
     <VersionPrefix>0.0.1</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageReleaseNotes>TODO</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
     <Title>Vostok configuration abstractions library</Title>
-    <Description>Configuration abstractions library for microservice toolkit http://vostok.tools/</Description>
+    <Description>A library with core configuration interfaces.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/configuration.abstractions</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/configuration.abstractions/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>vostok vostok.configuration.abstractions</PackageTags>
+    <PackageTags>vostok vostok.configuration</PackageTags>
     <RepositoryUrl>https://github.com/vostok/configuration.abstractions</RepositoryUrl>
   </PropertyGroup>
-
+  
 </Project>

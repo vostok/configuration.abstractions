@@ -11,19 +11,15 @@ namespace Vostok.Configuration.Abstractions.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class ValidateByAttribute : Attribute
     {
-        private readonly Type validatorType;
-        
         /// <inheritdoc />
         /// <summary>
         /// Initializes a new instance of <see cref="T:Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute" /> class.
         /// </summary>
-        public ValidateByAttribute(Type validatorType) => this.validatorType = validatorType;
+        public ValidateByAttribute(Type validatorType) => ValidatorType = validatorType;
 
-        // TODO(krait): Should we expose it to public like this?
         /// <summary>
-        /// Returns an instance of the specified validator class.
+        /// The specified validator type.
         /// </summary>
-        [NotNull]
-        public object Validator => Activator.CreateInstance(validatorType);
+        public Type ValidatorType { get; }
     }
 }

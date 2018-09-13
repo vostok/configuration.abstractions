@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Vostok.Configuration.Abstractions
 {
-    // TODO(krait): Split docs between this and the actual implementation.
+    // TODO(krait): Move implementation-specififc docs to ConfigurationProvider.
     /// <summary>
     /// Provides settings for your application, fresh and warm.
     /// </summary>

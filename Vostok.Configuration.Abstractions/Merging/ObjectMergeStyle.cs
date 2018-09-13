@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Vostok.Configuration.Abstractions.MergeOptions
+namespace Vostok.Configuration.Abstractions.Merging
 {
     /// <summary>
     /// Specifies the way object nodes are merged.

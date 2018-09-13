@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
-using Vostok.Configuration.Abstractions.MergeOptions;
+using Vostok.Configuration.Abstractions.Merging;
 
-namespace Vostok.Configuration.Abstractions.SettingsTree
+namespace Vostok.Configuration.Abstractions
 {
     /// <summary>
     /// Represents a tree of raw settings. 'Raw' means that all values are stored as strings.

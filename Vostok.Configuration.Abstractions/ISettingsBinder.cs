@@ -12,7 +12,8 @@ namespace Vostok.Configuration.Abstractions
         /// <para>Binds the provided <see cref="ISettingsNode"/> instance to type <typeparamref name="TSettings"/>.</para>
         /// <para>An exception will be thrown if the binding fails.</para>
         /// </summary>
-        TSettings Bind(ISettingsNode rawSettings);
+        [NotNull]
+        TSettings Bind([NotNull] ISettingsNode rawSettings);
     }
 
     /// <summary>
@@ -25,6 +26,7 @@ namespace Vostok.Configuration.Abstractions
         /// <para>Binds the provided <see cref="ISettingsNode"/> instance to type <typeparamref name="TSettings"/>.</para>
         /// <para>An exception will be thrown if the binding fails.</para>
         /// </summary>
-        TSettings Bind<TSettings>(ISettingsNode rawSettings);
+        [NotNull]
+        TSettings Bind<TSettings>([NotNull] ISettingsNode rawSettings);
     }
 }

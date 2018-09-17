@@ -13,7 +13,8 @@ namespace Vostok.Configuration.Abstractions.Extensions
         /// <summary>
         /// Subscribes an element handler to an observable sequence.
         /// </summary>
-        public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext)
+        [NotNull]
+        public static IDisposable Subscribe<T>([NotNull] this IObservable<T> source, [NotNull] Action<T> onNext)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -26,7 +27,8 @@ namespace Vostok.Configuration.Abstractions.Extensions
         /// <summary>
         /// Subscribes an element handler and an exception handler to an observable sequence.
         /// </summary>
-        public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError)
+        [NotNull]
+        public static IDisposable Subscribe<T>([NotNull] this IObservable<T> source, [NotNull] Action<T> onNext, [NotNull] Action<Exception> onError)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

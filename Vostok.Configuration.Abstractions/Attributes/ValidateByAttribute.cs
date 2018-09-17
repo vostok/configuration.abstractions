@@ -15,11 +15,13 @@ namespace Vostok.Configuration.Abstractions.Attributes
         /// <summary>
         /// Initializes a new instance of <see cref="T:Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute" /> class.
         /// </summary>
-        public ValidateByAttribute(Type validatorType) => ValidatorType = validatorType;
+        public ValidateByAttribute([NotNull] Type validatorType) => 
+            ValidatorType = validatorType ?? throw new ArgumentNullException(nameof(validatorType));
 
         /// <summary>
         /// The specified validator type.
         /// </summary>
+        [NotNull]
         public Type ValidatorType { get; }
     }
 }

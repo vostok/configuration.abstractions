@@ -14,8 +14,9 @@ namespace Vostok.Configuration.Abstractions
         /// <para>The returned <see cref="ISettingsNode"/> instance is cached, so this method is cheap and can be called freely.</para>
         /// <para>An exception can be thrown if the source is unavailable or contains invalid data, and there is no cached version of settings.</para>
         /// </summary>
+        [NotNull]
         ISettingsNode Get();
-        
+
         /// <summary>
         /// <para>Returns an observable sequence of raw settings.</para>
         /// <list type="bullet">
@@ -26,6 +27,7 @@ namespace Vostok.Configuration.Abstractions
         ///     <item><description>All sorts of errors are pushed via <see cref="IObserver{T}.OnError"/></description></item>
         /// </list>
         /// </summary>
+        [NotNull]
         IObservable<ISettingsNode> Observe();
     }
 }

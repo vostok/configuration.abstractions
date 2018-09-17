@@ -12,6 +12,8 @@ namespace Vostok.Configuration.Abstractions
         /// <summary>
         /// Validates the provided <paramref name="settings"/>. Should not stop upon encountering the first error. Instead, all errors should be returned as an enumerable of human-readable messages.
         /// </summary>
+        [NotNull]
+        [ItemNotNull]
         IEnumerable<string> Validate(T settings);
     }
 }

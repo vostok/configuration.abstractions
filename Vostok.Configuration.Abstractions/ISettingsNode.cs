@@ -26,6 +26,7 @@ namespace Vostok.Configuration.Abstractions
         /// A view of child nodes as an ordered collection. The order is same as in the source.
         /// </summary>
         [NotNull]
+        [ItemNotNull]
         IEnumerable<ISettingsNode> Children { get; }
 
         /// <summary>

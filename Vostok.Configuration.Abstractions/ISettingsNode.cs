@@ -30,14 +30,15 @@ namespace Vostok.Configuration.Abstractions
         IEnumerable<ISettingsNode> Children { get; }
 
         /// <summary>
+        /// Merges two settings trees by rules specified in <paramref name="options"/>.
+        /// </summary>
+        [NotNull]
+        ISettingsNode Merge([NotNull] ISettingsNode other, SettingsMergeOptions options = null);
+
+        /// <summary>
         /// A view of child nodes as a collection indexed by node names. Used for nodes that represent dictionaries or classes. Array elements cannot be accessed this way.
         /// </summary>
         [CanBeNull]
         ISettingsNode this[string name] { get; }
-
-        /// <summary>
-        /// Merges two settings trees by rules specified in <paramref name="options"/>.
-        /// </summary>
-        ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null);
     }
 }

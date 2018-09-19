@@ -5,7 +5,8 @@ using Vostok.Configuration.Abstractions.Merging;
 namespace Vostok.Configuration.Abstractions
 {
     /// <summary>
-    /// Represents a tree of raw settings. 'Raw' means that all values are stored as strings.
+    /// <para>Represents a tree of raw settings. 'Raw' means that all values are stored as strings.</para>
+    /// <para>This is an intermediate object model for settings. It's purpose is to abstract away different storage formats, such as JSON, XML or any other.</para>
     /// </summary>
     [PublicAPI]
     public interface ISettingsNode
@@ -33,7 +34,7 @@ namespace Vostok.Configuration.Abstractions
         /// Merges two settings trees by rules specified in <paramref name="options"/>.
         /// </summary>
         [NotNull]
-        ISettingsNode Merge([NotNull] ISettingsNode other, SettingsMergeOptions options = null);
+        ISettingsNode Merge([NotNull] ISettingsNode other, [CanBeNull] SettingsMergeOptions options = null);
 
         /// <summary>
         /// A view of child nodes as a collection indexed by node names. Used for nodes that represent dictionaries or classes. Array elements cannot be accessed this way.

@@ -5,7 +5,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
 {
     /// <inheritdoc />
     /// <summary>
-    /// Specifies that settings of this type should be validated by the provided validator.
+    /// Specifies that settings of this type should be validated by a validator of provided type.
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]

@@ -5,7 +5,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
 {
     /// <inheritdoc />
     /// <summary>
-    /// Marks a field or property required. The value must not be null.
+    /// Marks a field or property required. The value for it must exist in settings source and have correct format.
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]

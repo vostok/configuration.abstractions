@@ -3,7 +3,7 @@
 namespace Vostok.Configuration.Abstractions.Merging
 {
     /// <summary>
-    /// Specifies the way to merge settings trees.
+    /// Specifies the way to merge two <see cref="ISettingsNode"/>s.
     /// </summary>
     [PublicAPI]
     public class SettingsMergeOptions

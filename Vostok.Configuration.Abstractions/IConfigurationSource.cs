@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Vostok.Configuration.Abstractions
 {
     /// <summary>
-    /// Provides configuration in the form of raw settings trees.
+    /// Provides configuration in the form of raw settings trees (<see cref="ISettingsNode"/>s).
     /// </summary>
     [PublicAPI]
     public interface IConfigurationSource
@@ -17,12 +17,13 @@ namespace Vostok.Configuration.Abstractions
         /// <para>If there is no last value and the subscription is alive, this method waits for it to produce something.</para>
         /// <para>If the subscription is failed, it is created anew.</para>
         /// <para>If after all this the current subscription completes with error, that error is thrown.</para>
+        /// <para>It's expected for this method to be thread-safe.</para>
         /// </summary>
         [NotNull]
         ISettingsNode Get();
 
         /// <summary>
-        /// <para>Returns an observable sequence of raw settings.</para>
+        /// <para>Returns an observable sequence of raw settings along with non-fatal errors.</para>
         /// <para>Implementations should comply to the following rules.</para>
         /// <para>A background worker periodically (and/or by signal) attempts to read and parse a new configuration from the underlying source.</para>
         /// <para>If the update was successful and the new configuration differs from the old one, it is pushed to all observers. The error component in pair is null in this case.</para>
@@ -41,6 +42,8 @@ namespace Vostok.Configuration.Abstractions
         /// </para></description></item>
         /// </list>
         /// <para>New subscribers receive the last value (if it exists) immediately after subscription.</para>
+        /// <para>Note that a subsсription returned by this method becomes inactive after receiving an <see cref="IObserver{T}.OnError"/> notification and <b>it's required to re-subscribe in order to receive further updates</b>.</para>
+        /// <para>It's expected for this method to be thread-safe.</para>
         /// </summary>
         [NotNull]
         IObservable<(ISettingsNode settings, Exception error)> Observe();

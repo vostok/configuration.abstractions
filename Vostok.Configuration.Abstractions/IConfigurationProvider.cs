@@ -115,8 +115,9 @@ namespace Vostok.Configuration.Abstractions
         /// <summary>
         /// <para>Lets the <see cref="IConfigurationProvider"/> know that settings of type <typeparamref name="TSettings"/> should be taken from the provided <paramref name="source"/>.</para>
         /// <para>Until this method is called for <typeparamref name="TSettings"/> any attempt to <see cref="Get{TSettings}()"/> or <see cref="Observe{TSettings}()"/> settings of type <typeparamref name="TSettings"/> without explicitly specifying source will throw an exception.</para>
+        /// <para>If called multiple times for the same <typeparamref name="TSettings"/>, the last provided <paramref name="source"/> will be used. To set up multiple sources for a settings type, pass a combined source.</para>
         /// </summary>
         [NotNull]
-        IConfigurationProvider SetupSourceFor<TSettings>([NotNull] IConfigurationSource source);
+        void SetupSourceFor<TSettings>([NotNull] IConfigurationSource source);
     }
 }

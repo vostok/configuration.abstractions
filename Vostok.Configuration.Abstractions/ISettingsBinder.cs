@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions
 {

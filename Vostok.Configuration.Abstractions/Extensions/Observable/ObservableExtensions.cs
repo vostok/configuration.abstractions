@@ -2,7 +2,7 @@
 using System.Runtime.ExceptionServices;
 using JetBrains.Annotations;
 
-namespace Vostok.Configuration.Abstractions.Extensions
+namespace Vostok.Configuration.Abstractions.Extensions.Observable
 {
     /// <summary>
     /// Provides a set of static methods for subscribing delegates to observables.

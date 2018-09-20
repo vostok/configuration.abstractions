@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Vostok.Configuration.Abstractions.Extensions;
+using Vostok.Configuration.Abstractions.Extensions.Observable;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {

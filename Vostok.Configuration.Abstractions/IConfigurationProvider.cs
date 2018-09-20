@@ -111,5 +111,12 @@ namespace Vostok.Configuration.Abstractions
         /// </summary>
         [NotNull]
         IObservable<(TSettings settings, Exception error)> ObserveWithErrors<TSettings>([NotNull] IConfigurationSource source);
+
+        /// <summary>
+        /// <para>Lets the <see cref="IConfigurationProvider"/> know that settings of type <typeparamref name="TSettings"/> should be taken from the provided <paramref name="source"/>.</para>
+        /// <para>Until this method is called for <typeparamref name="TSettings"/> any attempt to <see cref="Get{TSettings}()"/> or <see cref="Observe{TSettings}()"/> settings of type <typeparamref name="TSettings"/> without explicitly specifying source will throw an exception.</para>
+        /// </summary>
+        [NotNull]
+        IConfigurationProvider SetupSourceFor<TSettings>([NotNull] IConfigurationSource source);
     }
 }

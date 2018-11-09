@@ -20,7 +20,10 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public ObjectNode([CanBeNull] string name, [CanBeNull] IReadOnlyDictionary<string, ISettingsNode> children)
         {
             Name = name;
-            this.children = children;
+            this.children = children == null
+                ? null
+                : new SortedDictionary<string, ISettingsNode>(children.ToDictionary(kv => kv.Key, kv => kv.Value),
+                    StringComparer.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

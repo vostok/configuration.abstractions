@@ -54,5 +54,18 @@ namespace Vostok.Configuration.Abstractions.Tests
             merge.Value.Should().Be("x2");
             merge.Name.Should().Be("name");
         }
+        
+        [Test]
+        public void ScopeTo_should_return_this_when_empty_scope()
+        {
+            var node = new ValueNode("root");
+            node.ScopeTo().Should().BeSameAs(node);
+        }
+
+        [Test]
+        public void ScopeTo_should_return_null_for_nonEmpty_scope()
+        {
+            new ValueNode("value").ScopeTo("key").Should().BeNull();
+        }
     }
 }

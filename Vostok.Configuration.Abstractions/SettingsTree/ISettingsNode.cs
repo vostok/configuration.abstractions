@@ -36,6 +36,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         [CanBeNull]
         ISettingsNode Merge([CanBeNull] ISettingsNode other, [CanBeNull] SettingsMergeOptions options = null);
 
+        [CanBeNull]
+        ISettingsNode ScopeTo(params string[] scope);
+
         /// <summary>
         /// A view of child nodes as a collection indexed by node names. Used for nodes that represent dictionaries or classes. Array elements cannot be accessed this way.
         /// </summary>

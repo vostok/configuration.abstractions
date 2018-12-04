@@ -39,11 +39,11 @@ namespace Vostok.Configuration.Abstractions
         /// </para></description></item>
         /// <item><description><para>
         /// Correct configuration was never obtained. Then, as we don't know if the problem will ever be fixed, we have no choice but to call <see cref="IObserver{T}.OnError"/> on all observers.
-        /// If the user wants to retry, they have to handle it themselves: incur a cooldown and re-subscribe to <see cref="Observe"/>. The cooldown is needed because while the source is broken all new subscribers receive <see cref="IObserver{T}.OnError"/> immediately.
+        /// If the user wants to retry, they have to handle it themselves: incur a cooldown and call <see cref="Observe"/> again to obtain a new observable. The cooldown is needed because while the source is broken all new subscribers receive <see cref="IObserver{T}.OnError"/> immediately.
         /// </para></description></item>
         /// </list>
         /// <para>New subscribers receive the last value (if it exists) immediately after subscription.</para>
-        /// <para>Note that a subsсription returned by this method becomes inactive after receiving an <see cref="IObserver{T}.OnError"/> notification and <b>it's required to re-subscribe in order to receive further updates</b>.</para>
+        /// <para>Note that an observable returned by this method becomes inactive after receiving an <see cref="IObserver{T}.OnError"/> notification and <b>it's required to obtain a new observable in order to receive further updates</b>.</para>
         /// <para>It's expected for this method to be thread-safe.</para>
         /// </summary>
         [NotNull]

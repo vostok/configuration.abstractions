@@ -129,48 +129,5 @@ namespace Vostok.Configuration.Abstractions.Tests
             children[3].Value.Should().Be("x2");
             children[4]["value"].Value.Should().Be("x21");
         }
-
-        [Test]
-        public void ScopeTo_should_return_this_when_empty_scope()
-        {
-            var node = new ArrayNode("root");
-            node.ScopeTo().Should().BeSameAs(node);
-        }
-
-        [Test]
-        public void ScopeTo_should_scope_to_child_when_correct_index()
-        {
-            var array = new[] {new ValueNode("value0"), new ValueNode("value1")};
-            var node = new ArrayNode(array);
-            node.ScopeTo("[1]").Should().BeSameAs(array[1]);
-        }
-
-        [TestCase(null, TestName = "null string")]
-        [TestCase("", TestName = "empty string")]
-        [TestCase("0", TestName = "no braces")]
-        [TestCase("key", TestName = "object key")]
-        [TestCase("[0", TestName = "no closing brace")]
-        [TestCase("0]", TestName = "no opening brace")]
-        [TestCase("[100]", TestName = "index is out of range")]
-        [TestCase("[-1]", TestName = "index is negative")]
-        [TestCase("[a]", TestName = "index is not a number")]
-        public void ScopeTo_should_return_null_when_incorrect_index(string index)
-        {
-            var array = new[] {new ValueNode("value0"), new ValueNode("value1")};
-            var node = new ArrayNode(array);
-            node.ScopeTo(index).Should().BeNull();
-        }
-
-        [Test]
-        public void ScopeTo_should_scope_recursively()
-        {
-            var value = new ValueNode("value");
-            
-            var child = Substitute.For<ISettingsNode>();
-            child.ScopeTo("a", "b").Returns(value);
-            
-            var node = new ArrayNode(new []{child});
-            node.ScopeTo("[0]", "a", "b").Should().Be(value);
-        }
     }
 }

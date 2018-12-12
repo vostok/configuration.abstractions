@@ -69,20 +69,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         }
 
         /// <inheritdoc />
-        public ISettingsNode ScopeTo(params string[] scope)
-        {
-            if (scope.Length == 0)
-                return this;
-
-            if (scope[0] == null)
-                return null;
-            
-            var child = this[scope[0]];
-            return child?.ScopeTo(scope.Skip(1).ToArray());
-        }
-
-        /// <inheritdoc />
-        public ISettingsNode this[string name] => children.TryGetValue(name, out var res) ? res : null;
+        public ISettingsNode this[string name] => children == null ? null : (children.TryGetValue(name, out var res) ? res : null);
 
         string ISettingsNode.Value { get; }
 

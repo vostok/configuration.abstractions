@@ -67,28 +67,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             }
         }
 
-        /// <inheritdoc />
-        public ISettingsNode ScopeTo(params string[] scope)
-        {
-            if (scope.Length == 0)
-                return this;
-
-            var currentScope = scope[0];
-            if (currentScope == null)
-                return null;
-
-            if (currentScope.StartsWith("[") && currentScope.EndsWith("]") && currentScope.Length > 2)
-            {
-                var num = currentScope.Substring(1, currentScope.Length - 2);
-                if (int.TryParse(num, out var index) && index >=0 && index < Children.Count())
-                    return children[index].ScopeTo(scope.Skip(1).ToArray());
-
-                return null;
-            }
-
-            return null;
-        }
-
         string ISettingsNode.Value { get; }
 
         ISettingsNode ISettingsNode.this[string name] => null;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using NSubstitute;
 using NUnit.Framework;
 using Vostok.Configuration.Abstractions.Merging;
 using Vostok.Configuration.Abstractions.SettingsTree;
@@ -165,50 +164,32 @@ namespace Vostok.Configuration.Abstractions.Tests
             merge["value2"].Value.Should().Be("x2");
             merge["value3"].Value.Should().Be("x1");
         }
-        
-        [Test]
-        public void ScopeTo_should_return_this_when_empty_scope()
-        {
-            var node = new ObjectNode("root");
-            node.ScopeTo().Should().BeSameAs(node);
-        }
 
         [Test]
-        public void ScopeTo_should_scope_to_child_when_valid_key()
-        {
-            var value = new ValueNode("value");
-            var node = new ObjectNode(new Dictionary<string, ISettingsNode>
-            {
-                ["key"] = value
-            });
-            node.ScopeTo("key").Should().BeSameAs(value);
-        }
-
-        [TestCase(null, TestName = "null string")]
-        [TestCase("", TestName = "empty string")]
-        [TestCase("otherKey", TestName = "non-existent key")]
-        public void ScopeTo_should_return_null_when_invalid_key(string key)
+        public void Indexer_should_return_correct_child_by_name()
         {
             var node = new ObjectNode(new Dictionary<string, ISettingsNode>
             {
-                ["key"] = new ValueNode("value")
+                { "key", new ValueNode("value") }
             });
-            node.ScopeTo(key).Should().BeNull();
+
+            node["key"].Value.Should().Be("value");
         }
 
         [Test]
-        public void ScopeTo_should_scope_recursively()
+        public void Indexer_should_return_null_if_key_is_not_found()
         {
-            var value = new ValueNode("value");
-            
-            var child = Substitute.For<ISettingsNode>();
-            child.ScopeTo("a", "b").Returns(value);
-            
-            var node = new ObjectNode(new Dictionary<string, ISettingsNode>
-            {
-                ["key"] = child
-            });
-            node.ScopeTo("key", "a", "b").Should().Be(value);
+            var node = new ObjectNode(new Dictionary<string, ISettingsNode>());
+
+            node["key"].Should().BeNull();
+        }
+
+        [Test]
+        public void Indexer_should_return_null_if_children_is_null()
+        {
+            var node = new ObjectNode(null as IReadOnlyDictionary<string, ISettingsNode>);
+
+            node["key"].Should().BeNull();
         }
     }
 }

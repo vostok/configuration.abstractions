@@ -1,55 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using NSubstitute;
 using NUnit.Framework;
 using Vostok.Configuration.Abstractions.Merging;
-using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
     // TODO(krait): Review tests.
     [TestFixture]
-    public class ArrayNode_Tests
+    public class ArrayNode_Tests : TreeConstructionSet
     {
-        [Test]
-        public void Constructors_are_equal()
-        {
-            var sets1 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x") });
-            var sets2 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x") });
-            sets1.Should().BeEquivalentTo(sets2);
-            Equals(sets1, sets2).Should().BeTrue("checks overrided Equals method");
-        }
-
         [Test]
         public void Equals_returns_false_by_name()
         {
-            var sets1 = new ArrayNode("Name1", new List<ISettingsNode> { new ValueNode("x") });
-            var sets2 = new ArrayNode("Name2", new List<ISettingsNode> { new ValueNode("x") });
+            var sets1 = Array("Name1", "x");
+            var sets2 = Array("Name2", "x");
             Equals(sets1, sets2).Should().BeFalse();
         }
 
         [Test]
         public void Equals_returns_false_by_children_value()
         {
-            var sets1 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x1") });
-            var sets2 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x2") });
+            var sets1 = Array("Name", "x1");
+            var sets2 = Array("Name", "x2");
             Equals(sets1, sets2).Should().BeFalse();
         }
 
         [Test]
         public void Hashes_should_be_equal_for_equal_instances()
         {
-            var sets1 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x") }).GetHashCode();
-            var sets2 = new ArrayNode("Name", new List<ISettingsNode> { new ValueNode("x") }).GetHashCode();
+            var sets1 = Array("Name", "x").GetHashCode();
+            var sets2 = Array("Name", "x").GetHashCode();
             sets1.Should().Be(sets2);
         }
 
         [Test]
         public void Should_return_other_on_merging_with_another_node_type()
         {
-            var sets1 = new ArrayNode(new List<ISettingsNode> { new ValueNode("x1") });
-            var sets2 = new ValueNode("x2");
+            var sets1 = Array(null, "x1");
+            var sets2 = Value("x2");
 
             var merge = sets1.Merge(sets2);
             merge.Value.Should().Be("x2");
@@ -63,30 +51,20 @@ namespace Vostok.Configuration.Abstractions.Tests
         [TestCase(ArrayMergeStyle.Union, TestName = "Union option")]
         public void Should_merge_with_different_options(ArrayMergeStyle style)
         {
-            var sets1 = new ArrayNode(new List<ISettingsNode>
-            {
-                new ValueNode("x1"),
-                new ValueNode("x2"),
-                new ValueNode("x3"),
-            });
-            var sets2 = new ArrayNode(new List<ISettingsNode>
-            {
-                new ValueNode("x1"),
-                new ValueNode("x4"),
-                new ValueNode("x5"),
-            });
+            var sets1 = Array(null, "x1", "x2", "x3");
+            var sets2 = Array(null, "x1", "x4", "x5");
 
             var merge = sets1.Merge(sets2, new SettingsMergeOptions { ArrayMergeStyle = style });
             switch (style)
             {
                 case ArrayMergeStyle.Replace:
-                    merge.Children.Select(c => c.Value).Should().ContainInOrder("x1", "x4", "x5");
+                    merge.Children.Select(c => c.Value).Should().Equal("x1", "x4", "x5");
                     break;
                 case ArrayMergeStyle.Concat:
-                    merge.Children.Select(c => c.Value).Should().ContainInOrder("x1", "x2", "x3", "x1", "x4", "x5");
+                    merge.Children.Select(c => c.Value).Should().Equal("x1", "x2", "x3", "x1", "x4", "x5");
                     break;
                 case ArrayMergeStyle.Union:
-                    merge.Children.Select(c => c.Value).Should().ContainInOrder("x1", "x2", "x3", "x4", "x5");
+                    merge.Children.Select(c => c.Value).Should().Equal("x1", "x2", "x3", "x4", "x5");
                     break;
             }
         }
@@ -94,31 +72,8 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Should_merge_wirh_different_options_right_way()
         {
-            var sets1 = new ArrayNode(new List<ISettingsNode>
-            {
-                new ValueNode("x1"),
-                new ObjectNode(new SortedDictionary<string, ISettingsNode>
-                {
-                    ["value"] = new ValueNode("x11"),
-                }),
-                new ObjectNode(new SortedDictionary<string, ISettingsNode>
-                {
-                    ["value"] = new ValueNode("x12"),
-                }),
-            });
-            var sets2 = new ArrayNode(new List<ISettingsNode>
-            {
-                new ValueNode("x1"),
-                new ValueNode("x2"),
-                new ObjectNode(new SortedDictionary<string, ISettingsNode>
-                {
-                    ["value"] = new ValueNode("x11"),
-                }),
-                new ObjectNode(new SortedDictionary<string, ISettingsNode>
-                {
-                    ["value"] = new ValueNode("x21"),
-                }),
-            });
+            var sets1 = Array(Value("x1"), Object(("value", "x11")), Object(("value", "x12")));
+            var sets2 = Array(Value("x1"), Value("x2"), Object(("value", "x11")), Object(("value", "x21")));
 
             var merge = sets1.Merge(sets2, new SettingsMergeOptions { ObjectMergeStyle = ObjectMergeStyle.Shallow, ArrayMergeStyle = ArrayMergeStyle.Union });
             var children = merge.Children.ToArray();

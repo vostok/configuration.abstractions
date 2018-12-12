@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Vostok.Configuration.Abstractions.Merging;
+using Vostok.Commons.Collections;
 
 namespace Vostok.Configuration.Abstractions.SettingsTree
 {
@@ -12,34 +13,45 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     [PublicAPI]
     public sealed class ObjectNode : ISettingsNode, IEquatable<ObjectNode>
     {
-        private readonly IReadOnlyDictionary<string, ISettingsNode> children;
+        private static readonly IEqualityComparer<string> IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
+
+        private readonly ImmutableArrayDictionary<string, ISettingsNode> children;
 
         /// <summary>
         /// Creates a new <see cref="ObjectNode"/> with the given <paramref name="name"/> and <paramref name="children"/>.
         /// </summary>
-        public ObjectNode([CanBeNull] string name, [CanBeNull] IReadOnlyDictionary<string, ISettingsNode> children)
+        public ObjectNode([CanBeNull] string name, [CanBeNull] ICollection<ISettingsNode> children)
         {
             Name = name;
-            this.children = children == null
-                ? null
-                : new SortedDictionary<string, ISettingsNode>(children.ToDictionary(kv => kv.Key, kv => kv.Value),
-                    StringComparer.InvariantCultureIgnoreCase);
+
+            if (children != null)
+            {
+                this.children = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, IgnoreCaseComparer);
+                foreach (var child in children)
+                    this.children = this.children.Set(child.Name, child);
+            }
         }
 
         /// <summary>
         /// Creates a new <see cref="ObjectNode"/> with the given <paramref name="name"/> and no children.
         /// </summary>
         public ObjectNode([CanBeNull] string name)
-            : this(name, null)
+            : this(name, null as ImmutableArrayDictionary<string, ISettingsNode>)
         {
         }
 
         /// <summary>
         /// Creates a new <see cref="ObjectNode"/> with the given <paramref name="children"/> and no name.
         /// </summary>
-        public ObjectNode([CanBeNull] IReadOnlyDictionary<string, ISettingsNode> children)
+        public ObjectNode([CanBeNull] ICollection<ISettingsNode> children)
             : this(null, children)
         {
+        }
+
+        private ObjectNode(string name, ImmutableArrayDictionary<string, ISettingsNode> children)
+        {
+            Name = name;
+            this.children = children;
         }
 
         /// <inheritdoc />
@@ -51,8 +63,16 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
         {
-            if (!(other is ObjectNode))
+            if (!(other is ObjectNode objectNodeOther))
                 return other;
+
+            if (!IgnoreCaseComparer.Equals(Name, other.Name))
+                return other;
+
+            if (children == null)
+                return new ObjectNode(Name, objectNodeOther.children); // TODO(krait): It this correct?
+            if (objectNodeOther.children == null)
+                return new ObjectNode(Name, children);
 
             if (options == null)
                 options = new SettingsMergeOptions();
@@ -60,9 +80,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             switch (options.ObjectMergeStyle)
             {
                 case ObjectMergeStyle.Shallow:
-                    return ShallowMerge(other, options);
+                    return ShallowMerge(objectNodeOther, options);
                 case ObjectMergeStyle.Deep:
-                    return DeepMerge(other, options);
+                    return DeepMerge(objectNodeOther, options);
                 default:
                     return null;
             }
@@ -73,32 +93,30 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
         string ISettingsNode.Value { get; }
 
-        private ISettingsNode DeepMerge(ISettingsNode other, SettingsMergeOptions options)
+        private ISettingsNode DeepMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            var comparer = StringComparer.InvariantCultureIgnoreCase;
-            var thisNames = children.Keys.ToArray();
-            var otherNames = other.Children.Select(c => c.Name).ToArray();
-            var duplicates = otherNames.Intersect(thisNames, comparer).ToArray();
-            var unique = thisNames.Unique(otherNames, comparer).ToArray();
+            var matchingKeys = children.Keys.Intersect(other.children.Keys, IgnoreCaseComparer);
+            var uniqueKeys = children.Keys.Unique(other.children.Keys, IgnoreCaseComparer);
 
-            var dict = new SortedDictionary<string, ISettingsNode>(comparer);
-            foreach (var name in unique)
-                dict.Add(name, this[name] ?? other[name]);
-            foreach (var name in duplicates)
-                dict.Add(name, this[name]?.Merge(other[name], options));
-            return new ObjectNode(other.Name, dict);
+            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count + other.children.Count, StringComparer.OrdinalIgnoreCase);
+            foreach (var key in uniqueKeys)
+                newChildren = newChildren.Set(key, this[key] ?? other[key]);
+            foreach (var key in matchingKeys)
+                newChildren = newChildren.Set(key, this[key]?.Merge(other[key], options));
+
+            return new ObjectNode(Name, newChildren);
         }
 
-        private ISettingsNode ShallowMerge(ISettingsNode other, SettingsMergeOptions options)
+        private ISettingsNode ShallowMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            var thisNames = children.Keys.OrderBy(k => k).ToArray();
-            var otherNames = other.Children.Select(c => c.Name).OrderBy(k => k).ToArray();
-            if (!thisNames.SequenceEqual(otherNames, StringComparer.InvariantCultureIgnoreCase))
+            if (!children.Keys.SequenceEqual(other.children.Keys, IgnoreCaseComparer))
                 return other;
-            var dict = new SortedDictionary<string, ISettingsNode>();
-            foreach (var name in thisNames)
-                dict.Add(name, this[name]?.Merge(other[name], options));
-            return new ObjectNode(other.Name, dict);
+
+            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, StringComparer.OrdinalIgnoreCase);
+            foreach (var key in children.Keys)
+                newChildren = newChildren.Set(key, this[key]?.Merge(other[key], options));
+
+            return new ObjectNode(other.Name, newChildren);
         }
 
         #region Equality

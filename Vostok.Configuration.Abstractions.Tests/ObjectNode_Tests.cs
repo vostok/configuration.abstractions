@@ -5,63 +5,50 @@ using FluentAssertions;
 using NUnit.Framework;
 using Vostok.Configuration.Abstractions.Merging;
 using Vostok.Configuration.Abstractions.SettingsTree;
+using Vostok.Commons.Collections;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
     // TODO(krait): Review tests.
     [TestFixture]
-    public class ObjectNode_Tests
+    public class ObjectNode_Tests : TreeConstructionSet
     {
-        [Test]
-        public void Constructors_are_equal()
-        {
-            var sets1 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") });
-            var sets2 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") });
-            sets1.Should().BeEquivalentTo(sets2);
-            Equals(sets1, sets2).Should().BeTrue("checks overrided Equals method");
-        }
-
         [Test]
         public void Equals_returns_false_by_name()
         {
-            var sets1 = new ObjectNode("Name1", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") });
-            var sets2 = new ObjectNode("Name2", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") });
+            var sets1 = Object("Name1", ("value", "x"));
+            var sets2 = Object("Name2", ("value", "x"));
             Equals(sets1, sets2).Should().BeFalse();
         }
 
         [Test]
         public void Equals_returns_false_by_children_key()
         {
-            var sets1 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value1"] = new ValueNode("x") });
-            var sets2 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value2"] = new ValueNode("x") });
+            var sets1 = Object("Name", ("value1", "x"));
+            var sets2 = Object("Name", ("value2", "x"));
             Equals(sets1, sets2).Should().BeFalse();
         }
 
         [Test]
         public void Equals_returns_false_by_children_value()
         {
-            var sets1 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x1") });
-            var sets2 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x2") });
+            var sets1 = Object("Name", ("value", "x1"));
+            var sets2 = Object("Name", ("value", "x2"));
             Equals(sets1, sets2).Should().BeFalse();
         }
 
         [Test]
         public void Hashes_should_be_equal_for_equal_instances()
         {
-            var sets1 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") }).GetHashCode();
-            var sets2 = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode> { ["value"] = new ValueNode("x") }).GetHashCode();
+            var sets1 = Object("Name", ("value", "x")).GetHashCode();
+            var sets2 = Object("Name", ("value", "x")).GetHashCode();
             sets1.Should().Be(sets2);
         }
 
         [Test]
         public void Keys_should_be_case_insensitive()
         {
-            var sets = new ObjectNode("Name", new SortedDictionary<string, ISettingsNode>(StringComparer.InvariantCultureIgnoreCase)
-            {
-                ["value"] = new ValueNode("v0"),
-                ["VALUE"] = new ValueNode("v1"),    //rewrites
-                ["TeSt"] = new ValueNode("v2"),
-            });
+            var sets = Object("Name", ("value", "v0"), ("VALUE", "v1"), ("TeSt", "v2"));
             
             sets.Children.Count().Should().Be(2, "v0 was rewrited");
 
@@ -74,56 +61,18 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Should_return_second_tree_on_shallow_merge_and_same_children_names()
         {
-            var sets1 = new ObjectNode(new SortedDictionary<string, ISettingsNode>
-            {
-                ["value1"] = new ValueNode("x1", "value1"),
-                ["value2"] = new ValueNode("x1", "value2"),
-            });
-            var sets2 = new ObjectNode(new SortedDictionary<string, ISettingsNode>
-            {
-                ["value1"] = new ValueNode("x2", "value1"),
-                ["value3"] = new ValueNode("x2", "value3"),
-            });
+            var sets1 = Object(("value1", "value1"), ("value2", "value2"));
+            var sets2 = Object(("value3", "value3"), ("value2", "value2"));
 
             var merge = sets1.Merge(sets2, new SettingsMergeOptions {ObjectMergeStyle = ObjectMergeStyle.Shallow});
             merge.Should().Be(sets2);
         }
 
         [Test]
-        public void Should_return_other_on_shallow_merge_and_same_children_names()
-        {
-            var comparer = StringComparer.InvariantCultureIgnoreCase;
-            var sets1 = new ObjectNode(new SortedDictionary<string, ISettingsNode>(comparer)
-            {
-                ["value1"] = new ObjectNode("value1", new SortedDictionary<string, ISettingsNode>(comparer)
-                {
-                    ["subvalue"] = new ValueNode("subvalue", "sx1"),
-                }),
-                ["value2"] = new ValueNode("value2", "x1"),
-            });
-            var sets2 = new ObjectNode(new SortedDictionary<string, ISettingsNode>(comparer)
-            {
-                ["value2"] = new ValueNode("value2", "x2"),
-                ["VALUE1"] = new ObjectNode("VALUE1", new SortedDictionary<string, ISettingsNode>(comparer)
-                {
-                    ["subvalue"] = new ValueNode("subvalue", "sx2"),
-                }),
-            });
-
-            var merge = sets1.Merge(sets2, new SettingsMergeOptions {ObjectMergeStyle = ObjectMergeStyle.Shallow});
-            merge.Children.Count().Should().Be(2);
-            merge["value2"].Value.Should().Be("x2");
-            merge["value2"].Name.Should().Be("value2");
-            merge["value1"].Name.Should().Be("VALUE1");
-            merge["value1"]["subvalue"].Value.Should().Be("sx2");
-            merge["value1"]["subvalue"].Name.Should().Be("subvalue");
-        }
-
-        [Test]
         public void Should_return_other_on_another_node_type()
         {
-            var sets1 = new ObjectNode(new SortedDictionary<string, ISettingsNode>{ ["value"] = new ValueNode("x1") });
-            var sets2 = new ValueNode("x2");
+            var sets1 = Object(("value", "x1"));
+            var sets2 = Value("x2");
 
             var merge = sets1.Merge(sets2);
             merge.Value.Should().Be("x2");
@@ -135,26 +84,8 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Should_make_deep_merge_correctly()
         {
-            var comparer = StringComparer.InvariantCultureIgnoreCase;
-            var sets1 = new ObjectNode(new SortedDictionary<string, ISettingsNode>(comparer)
-            {
-                ["value1"] = new ObjectNode("value1", new SortedDictionary<string, ISettingsNode>(comparer)
-                {
-                    ["sv1"] = new ValueNode("sv1", "sx1"),
-                    ["sv2"] = new ValueNode("sv2", "sx1"),
-                }),
-                ["value2"] = new ValueNode("value2", "x1"),
-                ["value3"] = new ValueNode("value3", "x1"),
-            });
-            var sets2 = new ObjectNode(new SortedDictionary<string, ISettingsNode>(comparer)
-            {
-                ["VALUE1"] = new ObjectNode("VALUE1", new SortedDictionary<string, ISettingsNode>(comparer)
-                {
-                    ["SV2"] = new ValueNode("sv2", "sx2"),
-                    ["sv3"] = new ValueNode("sv3", "sx2"),
-                }),
-                ["VALUE2"] = new ValueNode("VALUE2", "x2"),
-            });
+            var sets1 = Object(Object("value1", ("sv1", "sx1"), ("sv2", "sx1")), Value("value2", "x1"), Value("value3", "x1"));
+            var sets2 = Object(Object("VALUE1", ("SV2", "sx2"), ("sv3", "sx2")), Value("VALUE2", "x2"));
 
             var merge = sets1.Merge(sets2, new SettingsMergeOptions { ObjectMergeStyle = ObjectMergeStyle.Deep });
             merge.Children.Count().Should().Be(3);
@@ -168,10 +99,7 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Indexer_should_return_correct_child_by_name()
         {
-            var node = new ObjectNode(new Dictionary<string, ISettingsNode>
-            {
-                { "key", new ValueNode("value") }
-            });
+            var node = Object(("key", "value"));
 
             node["key"].Value.Should().Be("value");
         }
@@ -179,7 +107,7 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Indexer_should_return_null_if_key_is_not_found()
         {
-            var node = new ObjectNode(new Dictionary<string, ISettingsNode>());
+            var node = new ObjectNode(new ISettingsNode[] {});
 
             node["key"].Should().BeNull();
         }
@@ -187,9 +115,17 @@ namespace Vostok.Configuration.Abstractions.Tests
         [Test]
         public void Indexer_should_return_null_if_children_is_null()
         {
-            var node = new ObjectNode(null as IReadOnlyDictionary<string, ISettingsNode>);
+            var node = new ObjectNode(null as ISettingsNode[]);
 
             node["key"].Should().BeNull();
+        }
+
+        [Test]
+        public void Children_should_preserve_original_order()
+        {
+            var node = Object(("key1", "value1"), ("key3", "value3"), ("key2", "value2"));
+
+            node.Children.Select(n => n.Name).Should().Equal("key1", "key3", "key2");
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Vostok.Commons.Testing;
@@ -8,7 +7,7 @@ using Vostok.Configuration.Abstractions.SettingsTree;
 namespace Vostok.Configuration.Abstractions.Tests
 {
     [TestFixture]
-    public class SettingsNodeExtensions_Tests
+    public class SettingsNodeExtensions_Tests : TreeConstructionSet
     {
         [Test]
         public void ScopeTo_should_return_null_if_node_is_null()
@@ -70,17 +69,5 @@ namespace Vostok.Configuration.Abstractions.Tests
             node.ScopeTo("array", "0").Should().BeNull();
             node.ScopeTo("leaf", "_").Should().BeNull();
         }
-
-        #region Tree construction
-
-        private ValueNode Value(string name, string value) => new ValueNode(name, value);
-
-        private ArrayNode Array(string name, params string[] children) => new ArrayNode(name, children.Select(e => new ValueNode(e)).ToArray());
-
-        private ObjectNode Object(string name, params ISettingsNode[] children) => new ObjectNode(name, children.ToDictionary(e => e.Name, e => e, StringComparer.InvariantCultureIgnoreCase));
-
-        private ObjectNode Object(string name, params (string key, string value)[] children) => new ObjectNode(name, children.ToDictionary(e => e.key, e => new ValueNode(e.value) as ISettingsNode, StringComparer.InvariantCultureIgnoreCase));
-
-        #endregion
     }
 }

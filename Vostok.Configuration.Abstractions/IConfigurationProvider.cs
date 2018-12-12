@@ -13,25 +13,28 @@ namespace Vostok.Configuration.Abstractions
         /// <para>Returns the most recent value of <typeparamref name="TSettings"/> from preconfigured configuration sources.</para>
         /// <para>Implementations should comply to the following rules.</para>
         /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/>, an exception is thrown immediately.</para>
-        /// <para>If the source is found, this method uses the corresponding subscription and works exactly the same as <see cref="IConfigurationSource.Get"/> in <see cref="IConfigurationSource"/>.</para>
+        /// <para>Normally the method just returns the last configuration observed through <see cref="Observe{TSettings}()"/>.</para>
+        /// <para>If there is no last value and no errors, this method waits for a value.</para>
+        /// <para>If <see cref="IObserver{T}.OnError"/> is received, a new observable is obtained using <see cref="Observe{TSettings}()"/>.</para>
+        /// <para>If the new observable completes with error as well, that error is thrown.</para>
         /// <para>Note: <see cref="Get{TSettings}()"/> should be implemented over <see cref="Observe{TSettings}()"/> so that exceptions are reported to the provided error callback (see implementation-specific docs for details).</para>
         /// <para>It's expected for this method to be extremely cheap and be called each time the app needs access to settings.</para>
         /// <para>It's also expected for this method to be thread-safe.</para>
         /// </summary>
-        [NotNull]
         TSettings Get<TSettings>();
 
         /// <summary>
         /// <para>Returns the most recent value of <typeparamref name="TSettings"/> from the given <paramref name="source"/>.</para>
         /// <para>Implementations should comply to the following rules.</para>
-        /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/>, an exception is thrown immediately.</para>
-        /// <para>If the source is found, this method uses the corresponding subscription and works exactly the same as <see cref="IConfigurationSource.Get"/> in <see cref="IConfigurationSource"/>.</para>
-        /// <para>Note: <see cref="Get{TSettings}()"/> should be implemented over <see cref="Observe{TSettings}()"/> so that exceptions are reported to the provided error callback (see implementation-specific docs for details).</para>
+        /// <para>Normally the method just returns the last configuration observed through <see cref="Observe{TSettings}(IConfigurationSource)"/>.</para>
+        /// <para>If there is no last value and no errors, this method waits for a value.</para>
+        /// <para>If <see cref="IObserver{T}.OnError"/> is received, a new observable is obtained using <see cref="Observe{TSettings}(IConfigurationSource)"/>.</para>
+        /// <para>If the new observable completes with error as well, that error is thrown.</para>
+        /// <para>Note: <see cref="Get{TSettings}(IConfigurationSource)"/> should be implemented over <see cref="Observe{TSettings}(IConfigurationSource)"/> so that exceptions are reported to the provided error callback (see implementation-specific docs for details).</para>
         /// <para>All required state (cached subscription, cached last value and exception) should be stored in a limited-size cache keyed by <see cref="IConfigurationSource"/> instance.</para>
         /// <para>It's expected for this method to be extremely cheap and be called each time the app needs access to settings.</para>
         /// <para>It's also expected for this method to be thread-safe.</para>
         /// </summary>
-        [NotNull]
         TSettings Get<TSettings>([NotNull] IConfigurationSource source);
 
         /// <summary>
@@ -55,6 +58,7 @@ namespace Vostok.Configuration.Abstractions
         [NotNull]
         IObservable<TSettings> Observe<TSettings>([NotNull] IConfigurationSource source);
 
+        // TODO(krait): Add rules from ICS.Observe()..
         /// <summary>
         /// <para>Returns an <see cref="IObservable{T}"/> that receives the new value of <typeparamref name="TSettings"/> each time it is updated from its corresponding preconfigured source along with errors arising in process of doing so.</para>
         /// <para>Implementations should comply to the following rules.</para>

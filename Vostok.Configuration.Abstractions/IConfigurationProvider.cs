@@ -58,7 +58,6 @@ namespace Vostok.Configuration.Abstractions
         [NotNull]
         IObservable<TSettings> Observe<TSettings>([NotNull] IConfigurationSource source);
 
-        // TODO(krait): Add rules from ICS.Observe()..
         /// <summary>
         /// <para>Returns an <see cref="IObservable{T}"/> that receives the new value of <typeparamref name="TSettings"/> each time it is updated from its corresponding preconfigured source along with errors arising in process of doing so.</para>
         /// <para>Implementations should comply to the following rules.</para>
@@ -66,13 +65,13 @@ namespace Vostok.Configuration.Abstractions
         /// <para>Else, a subscription to the corresponding source is created once for given <typeparamref name="TSettings"/> (see <see cref="IConfigurationSource.Observe"/> for sources). Events that occur on that subscription are handled as follows:</para>
         /// <list type="number">
         /// <item><description><para>
-        /// If the received new pair has no exception and can be successfully bound and validated, we push the pair (new settings, null).
+        /// If the received new pair has no exception, the settings in the pair differ from the previous settings, and can be successfully bound and validated, we push the pair (new settings, null).
         /// </para></description></item>
         /// <item><description><para>
-        /// If the received new pair has no exception but the new config fails during binding or validation, we look for a saved successful settings instance. If it exists, and the current error differs from error corresponding to the saved successful instance, we push pair (last successful settings, new error). If there is no previous successful instance, we call <see cref="IObserver{T}.OnError"/> on subscribers.
+        /// If the new config fails during binding or validation, we look for a saved successful settings instance. If it exists, and the current error differs from error corresponding to the saved successful instance, we push pair (last successful settings, new error). If there is no previous successful instance, we call <see cref="IObserver{T}.OnError"/> on subscribers.
         /// </para></description></item>
         /// <item><description><para>
-        /// If the received new pair has an exception, we push (settings, error) even if the settings didn't change.
+        /// If the received new pair has an exception and the exception differs from the previous one, we push (last valid settings, exception) or (null, exception) if there is no last valid settings.
         /// </para></description></item>
         /// <item><description><para>
         /// If we receive <see cref="IObserver{T}.OnError"/>: if there is no saved successful instance, we call <see cref="IObserver{T}.OnError"/> ourselves. If there is a successful instance, we push (last successful settings, error from source) and re-subscribe to source after a cooldown. Nothing is pushed if after resubscription we still get an error and the error is the same. This re-subscription loop may continue forever if the source doesn't heal.

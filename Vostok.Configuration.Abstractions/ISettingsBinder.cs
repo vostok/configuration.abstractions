@@ -14,7 +14,7 @@ namespace Vostok.Configuration.Abstractions
         /// <para>An exception will be thrown if the binding fails.</para>
         /// </summary>
         [CanBeNull]
-        TSettings Bind([NotNull] ISettingsNode rawSettings);
+        TSettings Bind([CanBeNull] ISettingsNode rawSettings);
     }
 
     /// <summary>
@@ -28,6 +28,6 @@ namespace Vostok.Configuration.Abstractions
         /// <para>An exception will be thrown if the binding fails.</para>
         /// </summary>
         [CanBeNull]
-        TSettings Bind<TSettings>([NotNull] ISettingsNode rawSettings);
+        TSettings Bind<TSettings>([CanBeNull] ISettingsNode rawSettings);
     }
 }

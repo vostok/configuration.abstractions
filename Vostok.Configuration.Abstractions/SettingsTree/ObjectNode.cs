@@ -15,7 +15,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     {
         private static readonly IEqualityComparer<string> IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
 
-        private readonly ImmutableArrayDictionary<string, ISettingsNode> children;
+        private readonly ImmutableArrayDictionary<string, ISettingsNode> children = ImmutableArrayDictionary<string, ISettingsNode>.Empty;
 
         /// <summary>
         /// Creates a new <see cref="ObjectNode"/> with the given <paramref name="name"/> and <paramref name="children"/>.
@@ -36,7 +36,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// Creates a new <see cref="ObjectNode"/> with the given <paramref name="name"/> and no children.
         /// </summary>
         public ObjectNode([CanBeNull] string name)
-            : this(name, null as ImmutableArrayDictionary<string, ISettingsNode>)
+            : this(name, null as ICollection<ISettingsNode>)
         {
         }
 
@@ -58,7 +58,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public string Name { get; }
 
         /// <inheritdoc />
-        public IEnumerable<ISettingsNode> Children => children?.Values ?? Enumerable.Empty<ObjectNode>();
+        public IEnumerable<ISettingsNode> Children => children.Values;
 
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
@@ -68,11 +68,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
             if (!IgnoreCaseComparer.Equals(Name, other.Name))
                 return other;
-
-            if (children == null)
-                return new ObjectNode(Name, objectNodeOther.children); // TODO(krait): It this correct?
-            if (objectNodeOther.children == null)
-                return new ObjectNode(Name, children);
 
             if (options == null)
                 options = new SettingsMergeOptions();
@@ -89,7 +84,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         }
 
         /// <inheritdoc />
-        public ISettingsNode this[string name] => children == null ? null : (children.TryGetValue(name, out var res) ? res : null);
+        public ISettingsNode this[string name] => children.TryGetValue(name, out var res) ? res : null;
 
         string ISettingsNode.Value { get; }
 

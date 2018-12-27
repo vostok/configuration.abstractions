@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Vostok.Configuration.Abstractions.Merging;
+using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
@@ -23,6 +24,14 @@ namespace Vostok.Configuration.Abstractions.Tests
             var sets1 = Array("Name", "x1");
             var sets2 = Array("Name", "x2");
             Equals(sets1, sets2).Should().BeFalse();
+        }
+        
+        [Test]
+        public void Equals_returns_true_for_instances_with_null_and_empty_children()
+        {
+            var sets1 = new ArrayNode("Name", null);
+            var sets2 = new ArrayNode("Name", new ISettingsNode[0]);
+            Equals(sets1, sets2).Should().BeTrue();
         }
 
         [Test]

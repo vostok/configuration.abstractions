@@ -36,6 +36,14 @@ namespace Vostok.Configuration.Abstractions.Tests
             var sets2 = Object("Name", ("value", "x2"));
             Equals(sets1, sets2).Should().BeFalse();
         }
+        
+        [Test]
+        public void Equals_returns_true_for_instances_with_null_and_empty_children()
+        {
+            var sets1 = new ObjectNode("Name", null);
+            var sets2 = new ObjectNode("Name", new ISettingsNode[0]);
+            Equals(sets1, sets2).Should().BeTrue();
+        }
 
         [Test]
         public void Hashes_should_be_equal_for_equal_instances()

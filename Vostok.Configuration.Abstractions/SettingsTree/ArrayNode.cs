@@ -20,7 +20,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public ArrayNode([CanBeNull] string name, [CanBeNull] IReadOnlyList<ISettingsNode> children)
         {
             Name = name;
-            this.children = children;
+            this.children = children ?? Array.Empty<ISettingsNode>();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public string Name { get; }
 
         /// <inheritdoc />
-        public IEnumerable<ISettingsNode> Children => children.AsEnumerable() ?? Enumerable.Empty<ArrayNode>();
+        public IEnumerable<ISettingsNode> Children => children.AsEnumerable();
 
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)

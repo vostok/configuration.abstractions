@@ -6,7 +6,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     /// <summary>
     /// A set of extensions for <see cref="ISettingsNode"/>.
     /// </summary>
-    public static class SettingsNodeExtensions
+    [PublicAPI]
+    public static class ISettingsNodeExtensions
     {
         /// <summary>
         /// <para>Returns a subtree of the given settings tree. The subtree is located through descending into the tree by keys specified in <paramref name="scope"/>. Only <see cref="ObjectNode"/>s can be present along the path.</para>

@@ -10,7 +10,7 @@ notests *default:
 
   deps:
     - vostok.devtools
-    - vostok.commons.collections
+    - vostok.commons.collections/src
 
 full-build > notests:
   build:
@@ -18,4 +18,5 @@ full-build > notests:
     configuration: Release
 
   deps:
-    - vostok.commons.testing
+    - vostok.commons.testing/src
+

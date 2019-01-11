@@ -43,7 +43,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public string Name { get; }
 
         /// <inheritdoc />
-        public IEnumerable<ISettingsNode> Children => children.AsEnumerable();
+        public IEnumerable<ISettingsNode> Children => children;
 
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
@@ -59,9 +59,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                 case ArrayMergeStyle.Replace:
                     return other;
                 case ArrayMergeStyle.Concat:
-                    return new ArrayNode(Name, children.Concat(other.Children).ToList());
+                    return new ArrayNode(Name, children.Concat(other.Children).ToArray());
                 case ArrayMergeStyle.Union:
-                    return new ArrayNode(Name, children.Union(other.Children).ToList());
+                    return new ArrayNode(Name, children.Union(other.Children).ToArray());
                 default:
                     return null;
             }

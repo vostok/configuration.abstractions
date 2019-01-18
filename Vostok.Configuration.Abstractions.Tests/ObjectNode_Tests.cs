@@ -139,5 +139,38 @@ namespace Vostok.Configuration.Abstractions.Tests
 
             node.Merge(null, new SettingsMergeOptions { ObjectMergeStyle = mergeStyle }).Should().BeSameAs(node);
         }
+
+        [Test]
+        public void Children_must_never_be_null()
+        {
+            new ObjectNode("xx", null).Children.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Equals_should_be_case_insensitive_for_names()
+        {
+            var node1 = Object("xx", ("a", "b"));
+            var node2 = Object("XX", ("a", "b"));
+
+            node1.Equals(node2).Should().BeTrue();
+        }
+
+        [Test]
+        public void GetHashCode_should_use_node_name()
+        {
+            var node1 = Object("xx", ("a", "b"));
+            var node2 = Object("yy", ("a", "b"));
+
+            node1.GetHashCode().Should().NotBe(node2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_should_use_case_insensitive_hash_for_node_name()
+        {
+            var node1 = Object("xx", ("a", "b"));
+            var node2 = Object("XX", ("a", "b"));
+
+            node1.GetHashCode().Should().Be(node2.GetHashCode());
+        }
     }
 }

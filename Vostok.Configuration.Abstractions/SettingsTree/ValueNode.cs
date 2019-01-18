@@ -47,8 +47,16 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public override bool Equals(object obj) => Equals(obj as ValueNode);
 
         /// <inheritdoc />
-        public bool Equals(ValueNode other) =>
-            other != null && Value == other.Value && Name == other.Name;
+        public bool Equals(ValueNode other)
+        {
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return Comparers.NodeName.Equals(Name, other.Name) && Value == other.Value;
+        }
 
         /// <summary>
         /// Returns the hash code of the current <see cref="ObjectNode"/>.
@@ -58,7 +66,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             unchecked
             {
                 var valueHashCode = Value?.GetHashCode() ?? 0;
-                var nameHashCode = Name?.GetHashCode() ?? 0;
+                var nameHashCode = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
                 return valueHashCode * 397 + nameHashCode;
             }
         }

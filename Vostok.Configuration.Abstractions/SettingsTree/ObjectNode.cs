@@ -13,8 +13,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     [PublicAPI]
     public sealed class ObjectNode : ISettingsNode, IEquatable<ObjectNode>
     {
-        private static readonly IEqualityComparer<string> IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
-
         private readonly ImmutableArrayDictionary<string, ISettingsNode> children = ImmutableArrayDictionary<string, ISettingsNode>.Empty;
 
         /// <summary>
@@ -26,7 +24,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
             if (children != null)
             {
-                this.children = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, IgnoreCaseComparer);
+                this.children = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
                 foreach (var child in children)
                     this.children = this.children.Set(child.Name, child);
             }
@@ -69,11 +67,10 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!(other is ObjectNode objectNodeOther))
                 return other;
 
-            if (!IgnoreCaseComparer.Equals(Name, other.Name))
+            if (!Comparers.NodeName.Equals(Name, other.Name))
                 return other;
 
-            if (options == null)
-                options = new SettingsMergeOptions();
+            options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ObjectMergeStyle)
             {
@@ -93,10 +90,10 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
         private ISettingsNode DeepMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            var matchingKeys = children.Keys.Intersect(other.children.Keys, IgnoreCaseComparer);
-            var uniqueKeys = children.Keys.Unique(other.children.Keys, IgnoreCaseComparer);
+            var matchingKeys = children.Keys.Intersect(other.children.Keys, Comparers.NodeName);
+            var uniqueKeys = children.Keys.Unique(other.children.Keys, Comparers.NodeName);
 
-            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count + other.children.Count, StringComparer.OrdinalIgnoreCase);
+            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count + other.children.Count, Comparers.NodeName);
             foreach (var key in uniqueKeys)
                 newChildren = newChildren.Set(key, this[key] ?? other[key]);
             foreach (var key in matchingKeys)
@@ -107,10 +104,10 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
         private ISettingsNode ShallowMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            if (!children.Keys.SequenceEqual(other.children.Keys, IgnoreCaseComparer))
+            if (!children.Keys.SequenceEqual(other.children.Keys, Comparers.NodeName))
                 return other;
 
-            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, StringComparer.OrdinalIgnoreCase);
+            var newChildren = new ImmutableArrayDictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
             foreach (var key in children.Keys)
                 newChildren = newChildren.Set(key, this[key]?.Merge(other[key], options));
 
@@ -128,16 +125,14 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (other == null)
                 return false;
 
-            var thisChExists = children != null;
-            var otherChExists = other.children != null;
+            if (ReferenceEquals(this, other))
+                return true;
 
-            if (Name != other.Name ||
-                thisChExists != otherChExists)
+            if (!Comparers.NodeName.Equals(Name, other.Name))
                 return false;
 
-            if (thisChExists &&
-                (!new HashSet<string>(children.Keys).SetEquals(other.children.Keys) ||
-                 !new HashSet<ISettingsNode>(children.Values).SetEquals(other.children.Values)))
+            if (!new HashSet<string>(children.Keys).SetEquals(other.children.Keys) ||
+                !new HashSet<ISettingsNode>(children.Values).SetEquals(other.children.Values))
                 return false;
 
             return true;
@@ -150,20 +145,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         {
             unchecked
             {
-                var nameHashCode = Name?.GetHashCode() ?? 0;
-                var hashCode = (nameHashCode * 397) ^ (children != null ? ChildrenHash() : 0);
-                return hashCode;
-            }
+                int HashPair(KeyValuePair<string, ISettingsNode> pair) => (pair.Key?.GetHashCode() ?? 0) * 397 ^ (pair.Value?.GetHashCode() ?? 0);
 
-            int ChildrenHash()
-            {
-                var keysRes = children.Keys
-                    .Select(k => k.GetHashCode())
-                    .Aggregate(0, (a, b) => unchecked(a + b));
-                var valsRes = children.Values
-                    .Select(v => v.GetHashCode())
-                    .Aggregate(0, (a, b) => unchecked(a + b));
-                return unchecked(keysRes * 599) ^ valsRes;
+                var nameHash = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
+
+                return nameHash * 397 ^ children.Aggregate(children.Count, (current, element) => current * 397 ^ HashPair(element));
             }
         }
 

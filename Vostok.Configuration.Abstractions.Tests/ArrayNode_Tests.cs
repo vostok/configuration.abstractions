@@ -126,5 +126,38 @@ namespace Vostok.Configuration.Abstractions.Tests
 
             node.GetHashCode().Should().NotBe(0);
         }
+
+        [Test]
+        public void Children_must_never_be_null()
+        {
+            new ArrayNode("xx", null).Children.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Equals_should_be_case_insensitive_for_names()
+        {
+            var node1 = Array("xx", "yy");
+            var node2 = Array("XX", "yy");
+
+            node1.Equals(node2).Should().BeTrue();
+        }
+
+        [Test]
+        public void GetHashCode_should_use_node_name()
+        {
+            var node1 = Array("xx", "yy");
+            var node2 = Array("yy", "yy");
+
+            node1.GetHashCode().Should().NotBe(node2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_should_use_case_insensitive_hash_for_node_name()
+        {
+            var node1 = Array("xx", "yy");
+            var node2 = Array("XX", "yy");
+
+            node1.GetHashCode().Should().Be(node2.GetHashCode());
+        }
     }
 }

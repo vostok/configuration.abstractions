@@ -54,8 +54,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!(other is ArrayNode))
                 return other;
 
-            if (options == null)
-                options = new SettingsMergeOptions();
+            options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ArrayMergeStyle)
             {
@@ -88,7 +87,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (ReferenceEquals(this, other))
                 return true;
 
-            return Name == other.Name && children.SequenceEqual(other.children);
+            return Comparers.NodeName.Equals(Name, other.Name) && children.SequenceEqual(other.children);
         }
 
         /// <summary>
@@ -96,7 +95,12 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// </summary>
         public override int GetHashCode()
         {
-            return children.Aggregate(children.Count, (current, element) => current * 397 ^ (element?.GetHashCode() ?? 0));
+            unchecked
+            {
+                var nameHash = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
+
+                return nameHash * 397 ^ children.Aggregate(children.Count, (current, element) => current * 397 ^ (element?.GetHashCode() ?? 0));
+            }
         }
 
         #endregion

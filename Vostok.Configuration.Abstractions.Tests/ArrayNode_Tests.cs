@@ -100,5 +100,31 @@ namespace Vostok.Configuration.Abstractions.Tests
 
             node.Merge(null, new SettingsMergeOptions {ArrayMergeStyle = mergeStyle}).Should().BeSameAs(node);
         }
+
+        [Test]
+        public void Equals_should_respect_order_of_elements()
+        {
+            var node1 = Array("xx", "a", "b");
+            var node2 = Array("xx", "b", "a");
+
+            node1.Equals(node2).Should().BeFalse();
+        }
+
+        [Test]
+        public void GetHashCode_should_respect_order_of_elements()
+        {
+            var node1 = Array("xx", "a", "b");
+            var node2 = Array("xx", "b", "a");
+
+            node1.GetHashCode().Should().NotBe(node2.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_should_support_null_children()
+        {
+            var node = Array("xx", Value("a"), null, Value("b"));
+
+            node.GetHashCode().Should().NotBe(0);
+        }
     }
 }

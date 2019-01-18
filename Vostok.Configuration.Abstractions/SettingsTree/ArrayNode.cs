@@ -85,17 +85,10 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (other == null)
                 return false;
 
-            var thisChExists = children != null;
-            var otherChExists = other.children != null;
+            if (ReferenceEquals(this, other))
+                return true;
 
-            if (Name != other.Name ||
-                thisChExists != otherChExists)
-                return false;
-
-            if (thisChExists && !new HashSet<ISettingsNode>(children).SetEquals(other.children))
-                return false;
-
-            return true;
+            return Name == other.Name && children.SequenceEqual(other.children);
         }
 
         /// <summary>
@@ -103,20 +96,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// </summary>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var nameHashCode = Name?.GetHashCode() ?? 0;
-                var hashCode = (nameHashCode * 397) ^ (children != null ? ChildrenHash() : 0);
-                return hashCode;
-            }
-
-            int ChildrenHash()
-            {
-                var res = children
-                    .Select(k => k.GetHashCode())
-                    .Aggregate(0, (a, b) => unchecked(a + b));
-                return unchecked(res * 599);
-            }
+            return children.Aggregate(children.Count, (current, element) => current * 397 ^ (element?.GetHashCode() ?? 0));
         }
 
         #endregion

@@ -102,6 +102,20 @@ namespace Vostok.Configuration.Abstractions.Tests
         }
 
         [Test]
+        public void Merge_should_keep_other_node_if_names_differ()
+        {
+            var node1 = Array("xx", "yy");
+            var node2 = Array("yy", "yy");
+
+            node1.Merge(node2, new SettingsMergeOptions {ArrayMergeStyle = ArrayMergeStyle.Concat}).Should().BeSameAs(node2);
+
+            node1 = Array("xx", "yy");
+            node2 = Array("XX", "yy");
+
+            node1.Merge(node2, new SettingsMergeOptions {ArrayMergeStyle = ArrayMergeStyle.Concat}).Should().NotBeSameAs(node2);
+        }
+
+        [Test]
         public void Equals_should_respect_order_of_elements()
         {
             var node1 = Array("xx", "a", "b");

@@ -54,6 +54,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!(other is ArrayNode))
                 return other;
 
+            if (!Comparers.NodeName.Equals(Name, other.Name))
+                return other;
+
             options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ArrayMergeStyle)

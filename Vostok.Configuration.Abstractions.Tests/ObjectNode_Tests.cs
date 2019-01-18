@@ -141,6 +141,20 @@ namespace Vostok.Configuration.Abstractions.Tests
         }
 
         [Test]
+        public void Merge_should_keep_other_node_if_names_differ()
+        {
+            var node1 = Object("xx", ("a", "b"));
+            var node2 = Object("yy", ("a", "b"));
+
+            node1.Merge(node2).Should().BeSameAs(node2);
+
+            node1 = Object("xx", ("a", "b"));
+            node2 = Object("XX", ("a", "b"));
+
+            node1.Merge(node2).Should().NotBeSameAs(node2);
+        }
+
+        [Test]
         public void Children_must_never_be_null()
         {
             new ObjectNode("xx", null).Children.Should().NotBeNull();

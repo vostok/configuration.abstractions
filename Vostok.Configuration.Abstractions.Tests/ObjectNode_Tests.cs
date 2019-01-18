@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Vostok.Configuration.Abstractions.Merging;
 using Vostok.Configuration.Abstractions.SettingsTree;
-using Vostok.Commons.Collections;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
-    // TODO(krait): Review tests.
     [TestFixture]
     public class ObjectNode_Tests : TreeConstructionSet
     {
@@ -134,6 +130,14 @@ namespace Vostok.Configuration.Abstractions.Tests
             var node = Object(("key1", "value1"), ("key3", "value3"), ("key2", "value2"));
 
             node.Children.Select(n => n.Name).Should().Equal("key1", "key3", "key2");
+        }
+
+        [Test]
+        public void Merge_with_null_should_keep_non_null_node([Values] ObjectMergeStyle mergeStyle)
+        {
+            var node = Object("xx", ("a", "b"));
+
+            node.Merge(null, new SettingsMergeOptions { ObjectMergeStyle = mergeStyle }).Should().BeSameAs(node);
         }
     }
 }

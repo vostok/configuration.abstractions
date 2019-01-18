@@ -63,6 +63,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
         {
+            if (other == null)
+                return this;
+
             if (!(other is ObjectNode objectNodeOther))
                 return other;
 

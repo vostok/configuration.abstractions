@@ -6,7 +6,6 @@ using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
-    // TODO(krait): Review tests.
     [TestFixture]
     public class ArrayNode_Tests : TreeConstructionSet
     {
@@ -79,7 +78,7 @@ namespace Vostok.Configuration.Abstractions.Tests
         }
 
         [Test]
-        public void Should_merge_wirh_different_options_right_way()
+        public void Should_merge_with_different_options_right_way()
         {
             var sets1 = Array(Value("x1"), Object(("value", "x11")), Object(("value", "x12")));
             var sets2 = Array(Value("x1"), Value("x2"), Object(("value", "x11")), Object(("value", "x21")));
@@ -92,6 +91,14 @@ namespace Vostok.Configuration.Abstractions.Tests
             children[2]["value"].Value.Should().Be("x12");
             children[3].Value.Should().Be("x2");
             children[4]["value"].Value.Should().Be("x21");
+        }
+
+        [Test]
+        public void Merge_with_null_should_keep_non_null_node([Values] ArrayMergeStyle mergeStyle)
+        {
+            var node = Array("a", "b", "c");
+
+            node.Merge(null, new SettingsMergeOptions {ArrayMergeStyle = mergeStyle}).Should().BeSameAs(node);
         }
     }
 }

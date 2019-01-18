@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions.Tests
 {
-    // TODO(krait): Review tests.
     [TestFixture]
     public class ValueNode_Tests : TreeConstructionSet
     {
@@ -53,6 +51,13 @@ namespace Vostok.Configuration.Abstractions.Tests
             merge = sets1.Merge(sets2, null);
             merge.Value.Should().Be("x2");
             merge.Name.Should().Be("name");
+        }
+
+        [Test]
+        public void Merge_with_null_should_keep_non_null_node()
+        {
+            var node = Value("xx");
+            node.Merge(null).Should().BeSameAs(node);
         }
     }
 }

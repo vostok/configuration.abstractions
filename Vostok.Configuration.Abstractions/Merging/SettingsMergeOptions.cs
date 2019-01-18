@@ -17,6 +17,6 @@ namespace Vostok.Configuration.Abstractions.Merging
         /// <summary>
         /// The way to merge array nodes.
         /// </summary>
-        public ArrayMergeStyle ArrayMergeStyle { get; set; } = ArrayMergeStyle.Concat;
+        public ArrayMergeStyle ArrayMergeStyle { get; set; } = ArrayMergeStyle.Replace;
     }
 }

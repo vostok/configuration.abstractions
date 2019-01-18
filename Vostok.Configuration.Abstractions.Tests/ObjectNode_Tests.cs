@@ -186,5 +186,14 @@ namespace Vostok.Configuration.Abstractions.Tests
 
             node1.GetHashCode().Should().Be(node2.GetHashCode());
         }
+
+        [Test]
+        public void GetHashCode_should_not_depend_on_order_of_children()
+        {
+            var node1 = Object("xx", ("a", "b"), ("c", "d"));
+            var node2 = Object("xx", ("c", "d"), ("a", "b"));
+
+            node1.GetHashCode().Should().Be(node2.GetHashCode());
+        }
     }
 }

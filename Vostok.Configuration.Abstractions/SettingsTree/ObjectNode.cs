@@ -161,7 +161,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
                 var nameHash = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
 
-                return (nameHash * 397) ^ children.Aggregate(children.Count, (current, element) => (current * 397) ^ HashPair(element));
+                return (nameHash * 397) ^ children.Aggregate(children.Count, (current, element) => current ^ HashPair(element));
             }
         }
 

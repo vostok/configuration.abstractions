@@ -24,7 +24,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         {
             Name = name;
 
-            if (children != null)
+            if (children != null && children.Count > 0)
             {
                 this.children = new Dictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Vostok.Configuration.Abstractions.Merging;
-using Vostok.Configuration.Abstractions.Extensions;
 
 namespace Vostok.Configuration.Abstractions.SettingsTree
 {
@@ -28,6 +27,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (children != null)
             {
                 this.children = new Dictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
+
                 foreach (var child in children)
                 {
                     // ReSharper disable once ConstantConditionalAccessQualifier
@@ -79,6 +79,12 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!Comparers.NodeName.Equals(Name, other.Name))
                 return other;
 
+            if (children.Count == 0)
+                return other;
+
+            if (objectNodeOther.children.Count == 0)
+                return this;
+
             options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ObjectMergeStyle)
@@ -99,32 +105,30 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
         private ISettingsNode DeepMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            var newKeys = new HashSet<string>(children.Keys, Comparers.NodeName);
-            newKeys.UnionWith(other.children.Keys);
+            var newChildren = new Dictionary<string, ISettingsNode>(children, Comparers.NodeName);
 
-            var newChildren = new Dictionary<string, ISettingsNode>(newKeys.Count, Comparers.NodeName);
-            foreach (var key in newKeys)
+            foreach (var pair in other.children)
             {
-                var thisHasValue = children.TryGetValue(key, out var thisValue);
-                var otherHasValue = other.children.TryGetValue(key, out var otherValue);
-
-                if (thisHasValue && otherHasValue)
-                    newChildren[key] = thisValue.Merge(otherValue, options);
-                else
-                    newChildren[key] = thisHasValue ? thisValue : otherValue;
+                newChildren[pair.Key] = SettingsNodeMerger.Merge(this[pair.Key], pair.Value, options);
             }
-            
+
             return new ObjectNode(Name, newChildren);
         }
 
         private ISettingsNode ShallowMerge(ObjectNode other, SettingsMergeOptions options)
         {
-            if (!children.Keys.SetEquals(other.children.Keys, Comparers.NodeName))
+            if (other.children.Count != children.Count)
                 return other;
 
             var newChildren = new Dictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
+
             foreach (var pair in children)
-                newChildren[pair.Key] = pair.Value?.Merge(other[pair.Key], options);
+            {
+                if (!other.children.TryGetValue(pair.Key, out var otherValue))
+                    return other;
+
+                newChildren[pair.Key] = SettingsNodeMerger.Merge(pair.Value, otherValue, options);
+            }
 
             return new ObjectNode(Name, newChildren);
         }
@@ -146,7 +150,16 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!Comparers.NodeName.Equals(Name, other.Name))
                 return false;
 
-            return children.Values.SetEquals(other.children.Values);
+            if (children.Count != other.children.Count)
+                return false;
+
+            foreach (var pair in children)
+            {
+                if (!other.children.TryGetValue(pair.Key, out var otherValue) || !pair.Value.Equals(otherValue))
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -156,7 +169,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         {
             unchecked
             {
-                int HashPair(KeyValuePair<string, ISettingsNode> pair) => ((pair.Key?.GetHashCode() ?? 0) * 397) ^ (pair.Value?.GetHashCode() ?? 0);
+                int HashPair(KeyValuePair<string, ISettingsNode> pair)
+                    => ((pair.Key?.GetHashCode() ?? 0) * 397) ^ (pair.Value?.GetHashCode() ?? 0);
 
                 var nameHash = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
 

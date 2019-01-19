@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Vostok.Configuration.Abstractions.Merging;
-using Vostok.Commons.Collections;
 using Vostok.Configuration.Abstractions.Extensions;
 
 namespace Vostok.Configuration.Abstractions.SettingsTree

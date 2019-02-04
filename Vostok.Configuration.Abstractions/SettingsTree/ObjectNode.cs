@@ -67,6 +67,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public IEnumerable<ISettingsNode> Children => children.Values;
 
+        public int ChildrenCount => children.Count;
+
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
         {

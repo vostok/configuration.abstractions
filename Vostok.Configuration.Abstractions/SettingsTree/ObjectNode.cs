@@ -20,22 +20,27 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <para>Creates a new <see cref="ObjectNode"/> with the given <paramref name="name"/> and <paramref name="children"/>.</para>
         /// <para>All provided child nodes must have non-null names.</para>
         /// </summary>
-        public ObjectNode([CanBeNull] string name, [CanBeNull] [ItemNotNull] ICollection<ISettingsNode> children)
+        public ObjectNode([CanBeNull] string name, [CanBeNull] [ItemNotNull] IEnumerable<ISettingsNode> children)
         {
             Name = name;
 
-            if (children != null && children.Count > 0)
+            if (children == null)
+                return;
+
+            foreach (var child in children)
             {
-                this.children = new Dictionary<string, ISettingsNode>(children.Count, Comparers.NodeName);
+                // ReSharper disable once ConstantConditionalAccessQualifier
+                if (child?.Name == null)
+                    throw new ArgumentException($"All nodes from '{nameof(children)}' must have non-null names.");
 
-                foreach (var child in children)
+                if (this.children == EmptyDictionary)
                 {
-                    // ReSharper disable once ConstantConditionalAccessQualifier
-                    if (child?.Name == null)
-                        throw new ArgumentException($"All nodes from '{nameof(children)}' must have non-null names.");
+                    var childrenCapacity = children is ICollection<ISettingsNode> collection ? collection.Count : 4;
 
-                    this.children[child.Name] = child;
+                    this.children = new Dictionary<string, ISettingsNode>(childrenCapacity, Comparers.NodeName);
                 }
+
+                this.children[child.Name] = child;
             }
         }
 

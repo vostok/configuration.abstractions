@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Vostok.Configuration.Abstractions.Extensions
+namespace Vostok.Configuration.Abstractions
 {
     /// <summary>
     /// A set of extensions for <see cref="IConfigurationProvider"/>.

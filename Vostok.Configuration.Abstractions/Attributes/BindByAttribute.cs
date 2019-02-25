@@ -8,7 +8,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// Specifies that settings of this type should be bound by a settings binder of provided type.
     /// </summary>
     [PublicAPI]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property)]
     public class BindByAttribute : Attribute
     {
         public BindByAttribute([NotNull] Type binderType) => 

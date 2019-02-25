@@ -60,6 +60,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         {
         }
 
+        internal ObjectNode(ObjectNodeBuilder builder)
+            : this(builder.Name, builder.Children)
+        {
+        }
+
         private ObjectNode(string name, Dictionary<string, ISettingsNode> children)
         {
             Name = name;
@@ -104,6 +109,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                     return null;
             }
         }
+
+        /// <summary>
+        /// Returns a new <see cref="ObjectNodeBuilder"/> based on this <see cref="ObjectNode"/>'s contents.
+        /// </summary>
+        public ObjectNodeBuilder ToBuilder() => new ObjectNodeBuilder(this);
 
         /// <inheritdoc />
         public ISettingsNode this[string name] => children.TryGetValue(name, out var value) ? value : null;

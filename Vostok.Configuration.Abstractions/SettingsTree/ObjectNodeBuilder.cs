@@ -81,13 +81,32 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (child.Name == null)
                 throw new ArgumentException("All child nodes must have non-null names.");
 
-            if (state == BuiltState)
-                throw new InvalidOperationException($"This {nameof(ObjectNodeBuilder)} has already been used to build a node.");
+            EnsureNotBuiltYet();
 
             Children[child.Name] = child;
         }
 
+        /// <summary>
+        /// Removes a child node with given <paramref name="name"/> if it exists.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Provided child name is <c>null</c>.</exception>
+        public void RemoveChild(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+
+            EnsureNotBuiltYet();
+
+            Children.Remove(name);
+        }
+
         [NotNull]
         internal Dictionary<string, ISettingsNode> Children { get; }
+
+        private void EnsureNotBuiltYet()
+        {
+            if (state == BuiltState)
+                throw new InvalidOperationException($"This {nameof(ObjectNodeBuilder)} has already been used to build a node.");
+        }
     }
 }

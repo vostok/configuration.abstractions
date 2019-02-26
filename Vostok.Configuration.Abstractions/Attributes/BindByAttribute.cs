@@ -5,7 +5,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
 {
     /// <inheritdoc />
     /// <summary>
-    /// Specifies that settings of this type should be bound by a settings binder of provided type.
+    /// Specifies that settings in annotated type/field/property should be bound by an <see cref="ISettingsBinder{TSettings}"/> of provided type.
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property)]

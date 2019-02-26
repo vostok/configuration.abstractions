@@ -74,6 +74,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             }
         }
 
+        public override string ToString() => SettingsNodeRenderer.Render(this);
+
         string ISettingsNode.Value { get; }
 
         ISettingsNode ISettingsNode.this[string name] => null;

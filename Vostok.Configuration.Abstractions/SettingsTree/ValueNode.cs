@@ -37,6 +37,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null) => other ?? this;
 
+        public override string ToString() => SettingsNodeRenderer.Render(this);
+
         IEnumerable<ISettingsNode> ISettingsNode.Children => Enumerable.Empty<ValueNode>();
 
         ISettingsNode ISettingsNode.this[string name] => null;

@@ -110,6 +110,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             }
         }
 
+        public override string ToString() => SettingsNodeRenderer.Render(this);
+        
         /// <summary>
         /// Returns a new <see cref="ObjectNodeBuilder"/> based on this <see cref="ObjectNode"/>'s contents.
         /// </summary>

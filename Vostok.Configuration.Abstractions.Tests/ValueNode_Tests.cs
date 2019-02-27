@@ -7,10 +7,10 @@ namespace Vostok.Configuration.Abstractions.Tests
     public class ValueNode_Tests : TreeConstructionSet
     {
         [Test]
-        public void Name_should_equal_value_if_null()
+        public void Should_support_null_names()
         {
             var sets = Value("x");
-            sets.Name.Should().Be("x");
+            sets.Name.Should().BeNull();
         }
 
         [Test]

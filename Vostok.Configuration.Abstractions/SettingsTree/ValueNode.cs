@@ -17,7 +17,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public ValueNode([CanBeNull] string name, [CanBeNull] string value)
         {
             Value = value;
-            Name = name ?? value;
+            Name = name;
         }
 
         /// <summary>

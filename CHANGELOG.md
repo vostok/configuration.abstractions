@@ -1,3 +1,7 @@
+## 0.1.2 (27-02-2019): 
+
+* ISettingsBinder: settings argument can be null.
+
 ## 0.1.1 (26-02-2019): 
 
 * Added BindByAttribute to provide custom binders for fields, properties and types.

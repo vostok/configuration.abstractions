@@ -1,3 +1,7 @@
+## 0.1.4 (28-02-2019): 
+
+* ArrayNode, ObjectNode: merge no longer prefers to replace when node names differ.
+
 ## 0.1.3 (28-02-2019): 
 
 * IConfigurationProvider: removed ObserveWithErrors() methods.

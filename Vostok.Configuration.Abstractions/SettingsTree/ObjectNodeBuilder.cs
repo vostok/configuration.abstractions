@@ -56,6 +56,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         public string Name { get; set; }
 
         /// <summary>
+        /// Returns current children count.
+        /// </summary>
+        public int ChildrenCount => Children.Count;
+
+        /// <summary>
         /// <para>Builds a new <see cref="ObjectNode"/> based on current builder's contents.</para>
         /// <para>Note that it's not safe to continue using an instance of <see cref="ObjectNodeBuilder"/> after calling <see cref="Build"/>.</para>
         /// </summary>
@@ -99,6 +104,12 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
             Children.Remove(name);
         }
+
+        /// <summary>
+        /// Returns a child node with given <paramref name="name"/> or <c>null</c> if there's no such node.
+        /// </summary>
+        [CanBeNull]
+        public ISettingsNode this[string name] => Children.TryGetValue(name, out var value) ? value : null;
 
         [NotNull]
         internal Dictionary<string, ISettingsNode> Children { get; }

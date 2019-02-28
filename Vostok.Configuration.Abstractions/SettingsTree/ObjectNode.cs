@@ -88,9 +88,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!(other is ObjectNode objectNodeOther))
                 return other;
 
-            if (!Comparers.NodeName.Equals(Name, other.Name))
-                return other;
-
             if (children.Count == 0)
                 return other;
 
@@ -131,7 +128,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                 newChildren[pair.Key] = SettingsNodeMerger.Merge(this[pair.Key], pair.Value, options);
             }
 
-            return new ObjectNode(Name, newChildren);
+            return new ObjectNode(other.Name, newChildren);
         }
 
         private ISettingsNode ShallowMerge(ObjectNode other, SettingsMergeOptions options)
@@ -149,7 +146,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                 newChildren[pair.Key] = SettingsNodeMerger.Merge(pair.Value, otherValue, options);
             }
 
-            return new ObjectNode(Name, newChildren);
+            return new ObjectNode(other.Name, newChildren);
         }
 
         #region Equality

@@ -56,9 +56,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             if (!(other is ArrayNode))
                 return other;
 
-            if (!Comparers.NodeName.Equals(Name, other.Name))
-                return other;
-
             options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ArrayMergeStyle)
@@ -66,9 +63,9 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                 case ArrayMergeStyle.Replace:
                     return other;
                 case ArrayMergeStyle.Concat:
-                    return new ArrayNode(Name, children.Concat(other.Children).ToArray());
+                    return new ArrayNode(other.Name, children.Concat(other.Children).ToArray());
                 case ArrayMergeStyle.Union:
-                    return new ArrayNode(Name, children.Union(other.Children).ToArray());
+                    return new ArrayNode(other.Name, children.Union(other.Children).ToArray());
                 default:
                     return null;
             }

@@ -39,55 +39,78 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                     break;
 
                 case ArrayNode arrayNode:
-                    builder
-                        .Indent(depth)
-                        .AppendLine(OpeningSquareBracket);
-
-                    foreach (var child in arrayNode.Children)
+                    if (arrayNode.ChildrenCount > 0)
                     {
-                        RenderInternal(child, builder, depth + 1);
 
                         builder
-                            .Append(Comma)
-                            .AppendLine();
-                    }
+                            .Indent(depth)
+                            .AppendLine(OpeningSquareBracket);
 
-                    builder
+                        var counter = 0;
+
+                        foreach (var child in arrayNode.Children)
+                        {
+                            RenderInternal(child, builder, depth + 1);
+
+                            if (++counter < arrayNode.ChildrenCount)
+                                builder.Append(Comma);
+
+                            builder.AppendLine();
+                        }
+
+                        builder
+                            .Indent(depth)
+                            .Append(ClosingSquareBracket);
+                    }
+                    else builder
                         .Indent(depth)
+                        .Append(OpeningSquareBracket)
                         .Append(ClosingSquareBracket);
 
                     break;
 
                 case ObjectNode objectNode:
-                    builder
-                        .Indent(depth)
-                        .AppendLine(OpeningCurlyBracket);
-
-                    foreach (var child in objectNode.Children)
+                    if (objectNode.ChildrenCount > 0)
                     {
                         builder
-                            .Indent(depth + 1)
-                            .Append(Quote)
-                            .Append(child.Name)
-                            .Append(Quote)
-                            .Append(Colon)
-                            .Append(Space);
+                            .Indent(depth)
+                            .AppendLine(OpeningCurlyBracket);
 
-                        if (child.Children.Any())
+                        var counter = 0;
+
+                        foreach (var child in objectNode.Children)
                         {
+                            builder
+                                .Indent(depth + 1)
+                                .Append(Quote)
+                                .Append(child.Name)
+                                .Append(Quote)
+                                .Append(Colon)
+                                .Append(Space);
+
+                            if (child.Children.Any())
+                            {
+                                builder.AppendLine();
+                                RenderInternal(child, builder, depth + 1);
+                            }
+                            else
+                            {
+                                RenderInternal(child, builder, 0);
+                            }
+
+                            if (++counter < objectNode.ChildrenCount)
+                                builder.Append(Comma);
+
                             builder.AppendLine();
-                            RenderInternal(child, builder, depth + 1);
-                        }
-                        else
-                        {
-                            RenderInternal(child, builder, 0);
                         }
 
-                        builder.AppendLine();
+                        builder
+                            .Indent(depth)
+                            .Append(ClosingCurlyBracket);
                     }
-
-                    builder
+                    else builder
                         .Indent(depth)
+                        .Append(OpeningCurlyBracket)
                         .Append(ClosingCurlyBracket);
 
                     break;

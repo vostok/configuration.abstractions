@@ -12,28 +12,28 @@ namespace Vostok.Configuration.Abstractions
         /// <summary>
         /// <para>Returns the most recent value of <typeparamref name="TSettings"/> from preconfigured configuration sources.</para>
         /// <para>Implementations should comply to the following rules.</para>
-        /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/>, an exception is thrown immediately.</para>
+        /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/> with <see cref="SetupSourceFor{TSettings}"/>, an exception is thrown immediately.</para>
         /// <para>Normally the method just returns the last configuration observed through <see cref="Observe{TSettings}()"/>.</para>
-        /// <para>If there is no last value and no errors, this method waits for a value.</para>
-        /// <para>If <see cref="IObserver{T}.OnError"/> is received, a new observable is obtained using <see cref="Observe{TSettings}()"/>.</para>
-        /// <para>If the new observable completes with error as well, that error is thrown.</para>
-        /// <para>Note: <see cref="Get{TSettings}()"/> should be implemented over <see cref="Observe{TSettings}()"/> so that exceptions are reported to the provided error callback (see implementation-specific docs for details).</para>
+        /// <para>If an error (originating from either <see cref="IConfigurationSource"/>, parser or anything inbetween) happens after observing valid settings at least once, it doesn't affect the behaviour of <see cref="Get{TSettings}()"/>: the method just returns last seen valid settings.</para>
+        /// <para>If such an error arises before observing first valid settings instance, it causes <see cref="Get{TSettings}()"/> calls to throw exceptions until first valid settings are observed.</para>
+        /// <para>If there is no last value and no errors (<see cref="IConfigurationSource"/> doesn't produce anything), this method blocks waiting for a value.</para>
         /// <para>It's expected for this method to be extremely cheap and be called each time the app needs access to settings.</para>
         /// <para>It's also expected for this method to be thread-safe.</para>
         /// </summary>
         TSettings Get<TSettings>();
 
         /// <summary>
-        /// <para>Returns the most recent value of <typeparamref name="TSettings"/> from the given <paramref name="source"/>.</para>
-        /// <para>Implementations should comply to the following rules.</para>
-        /// <para>Normally the method just returns the last configuration observed through <see cref="Observe{TSettings}(IConfigurationSource)"/>.</para>
-        /// <para>If there is no last value and no errors, this method waits for a value.</para>
-        /// <para>If <see cref="IObserver{T}.OnError"/> is received, a new observable is obtained using <see cref="Observe{TSettings}(IConfigurationSource)"/>.</para>
-        /// <para>If the new observable completes with error as well, that error is thrown.</para>
-        /// <para>Note: <see cref="Get{TSettings}(IConfigurationSource)"/> should be implemented over <see cref="Observe{TSettings}(IConfigurationSource)"/> so that exceptions are reported to the provided error callback (see implementation-specific docs for details).</para>
-        /// <para>All required state (cached subscription, cached last value and exception) should be stored in a limited-size cache keyed by <see cref="IConfigurationSource"/> instance.</para>
-        /// <para>It's expected for this method to be extremely cheap and be called each time the app needs access to settings.</para>
-        /// <para>It's also expected for this method to be thread-safe.</para>
+        /// <para>This method behaves similar to its parameterless counterpart (<see cref="Get{TSettings}()"/>) with following exceptions:</para>
+        /// <list type="bullet">
+        ///     <item><description>It doesn't require to set up the source for type beforehand with <see cref="SetupSourceFor{TSettings}"/>: source is passed as argument.</description></item>
+        ///     <item>
+        ///         <description>
+        ///         It stores internal state (subscriptions to sources, cached last values) in a cache limited in size.
+        ///         This cache might drop mentioned state in the event of overflow, which can potentially violate the guarantee of not producing exceptions after observing first valid value.
+        ///         Cache overflows typically result from passing lots of distinct <see cref="IConfigurationSource"/> instances to this method.
+        ///         </description>
+        ///     </item>
+        /// </list>
         /// </summary>
         TSettings Get<TSettings>([NotNull] IConfigurationSource source);
 

@@ -59,63 +59,6 @@ namespace Vostok.Configuration.Abstractions
         IObservable<TSettings> Observe<TSettings>([NotNull] IConfigurationSource source);
 
         /// <summary>
-        /// <para>Returns an <see cref="IObservable{T}"/> that receives the new value of <typeparamref name="TSettings"/> each time it is updated from its corresponding preconfigured source along with errors arising in process of doing so.</para>
-        /// <para>Implementations should comply to the following rules.</para>
-        /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/>, an exception is thrown immediately.</para>
-        /// <para>Else, a subscription to the corresponding source is created once for given <typeparamref name="TSettings"/> (see <see cref="IConfigurationSource.Observe"/> for sources). Events that occur on that subscription are handled as follows:</para>
-        /// <list type="number">
-        /// <item><description><para>
-        /// If the received new pair has no exception, the settings in the pair differ from the previous settings, and can be successfully bound and validated, we push the pair (new settings, null).
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If the new config fails during binding or validation, we look for a saved successful settings instance. If it exists, and the current error differs from error corresponding to the saved successful instance, we push pair (last successful settings, new error). If there is no previous successful instance, we call <see cref="IObserver{T}.OnError"/> on subscribers.
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If the received new pair has an exception and the exception differs from the previous one, we push (last valid settings, exception) or (null, exception) if there is no last valid settings.
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If we receive <see cref="IObserver{T}.OnError"/>: if there is no saved successful instance, we call <see cref="IObserver{T}.OnError"/> ourselves. If there is a successful instance, we push (last successful settings, error from source) and re-subscribe to source after a cooldown. Nothing is pushed if after resubscription we still get an error and the error is the same. This re-subscription loop may continue forever if the source doesn't heal.
-        /// </para></description></item>
-        /// </list>
-        /// <para>If there is an exception in the pair received from the source and there is an exception during binding/validation, they are packed into an <see cref="AggregateException"/>.</para>
-        /// <para>If a source provides an exception with the first version of settings, the exception is passed through.</para>
-        /// <para>New subscribers receive the last value (if it exists) immediately after subscription.</para>
-        /// <para>Note that a subsсription returned by this method becomes inactive after receiving an <see cref="IObserver{T}.OnError"/> notification and <b>it's required to re-subscribe in order to receive further updates</b>.</para>
-        /// <para>It's also expected for this method to be thread-safe.</para>
-        /// </summary>
-        [NotNull]
-        IObservable<(TSettings settings, Exception error)> ObserveWithErrors<TSettings>();
-
-        /// <summary>
-        /// <para>Returns an <see cref="IObservable{T}"/> that receives the new value of <typeparamref name="TSettings"/> each time it is updated from the given <paramref name="source"/> along with errors arising in process of doing so.</para>
-        /// <para>Implementations should comply to the following rules.</para>
-        /// <para>If there is no source preconfigured for <typeparamref name="TSettings"/>, an exception is thrown immediately.</para>
-        /// <para>Else, a subscription to the corresponding source is created (once for given <typeparamref name="TSettings"/>). Events that occur on that subscription are handled as follows:</para>
-        /// <list type="number">
-        /// <item><description><para>
-        /// If the received new pair has no exception and can be successfully bound and validated, we push the pair (new settings, null).
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If the received new pair has no exception but the new config fails during binding or validation, we look for a saved successful settings instance. If it exists, and the current error differs from error corresponding to the saved successful instance, we push pair (last successful settings, new error). If there is no previous successful instance, we call <see cref="IObserver{T}.OnError"/> on subscribers.
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If the received new pair has an exception, we push (settings, error) even if the settings didn't change.
-        /// </para></description></item>
-        /// <item><description><para>
-        /// If we receive <see cref="IObserver{T}.OnError"/>: if there is no saved successful instance, we call <see cref="IObserver{T}.OnError"/>. If there is a successful instance, we push (last successful settings, error from source) and re-subscribe to source after a cooldown. Nothing is pushed if after resubscription we still get an error and the error is the same. This re-subscription loop may continue forever if the source doesn't heal.
-        /// </para></description></item>
-        /// </list>
-        /// <para>If there is an exception in the pair received from the source and there is an exception during binding/validation, they are packed into an <see cref="AggregateException"/>.</para>
-        /// <para>If a source provides an exception with the first version of settings, the exception is passed through.</para>
-        /// <para>New subscribers receive the last value (if it exists) immediately after subscription.</para>
-        /// <para>Note that a subsсription returned by this method becomes inactive after receiving an <see cref="IObserver{T}.OnError"/> notification and <b>it's required to re-subscribe in order to receive further updates</b>.</para>
-        /// <para>All required state (cached source subscription, cached last value and exception) should be stored in a limited-size cache keyed by <see cref="IConfigurationSource"/> instance.</para>
-        /// <para>It's also expected for this method to be thread-safe.</para>
-        /// </summary>
-        [NotNull]
-        IObservable<(TSettings settings, Exception error)> ObserveWithErrors<TSettings>([NotNull] IConfigurationSource source);
-
-        /// <summary>
         /// <para>Lets the <see cref="IConfigurationProvider"/> know that settings of type <typeparamref name="TSettings"/> should be taken from the provided <paramref name="source"/>.</para>
         /// <para>Until this method is called for <typeparamref name="TSettings"/> any attempt to <see cref="Get{TSettings}()"/> or <see cref="Observe{TSettings}()"/> settings of type <typeparamref name="TSettings"/> without explicitly specifying source will throw an exception.</para>
         /// <para>If called multiple times for the same <typeparamref name="TSettings"/>, the last provided <paramref name="source"/> will be used. To set up multiple sources for a settings type, pass a combined source.</para>

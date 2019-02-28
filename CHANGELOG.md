@@ -1,3 +1,8 @@
+## 0.1.3 (28-02-2019): 
+
+* IConfigurationProvider: removed ObserveWithErrors() methods.
+* IConfigurationProvider: sequences returned by Observe() methods are now guaranteed not to produce OnError notifications.
+
 ## 0.1.2 (27-02-2019): 
 
 * ISettingsBinder: settings argument can be null.

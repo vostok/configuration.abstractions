@@ -1,3 +1,7 @@
+## 0.1.5 (01-03-2019): 
+
+* Minor fixes in string representation of tree nodes.
+
 ## 0.1.4 (28-02-2019): 
 
 * ArrayNode, ObjectNode: merge no longer prefers to replace when node names differ.

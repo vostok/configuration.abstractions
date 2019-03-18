@@ -8,7 +8,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// Marks all fields and properties required by default. See <see cref="RequiredAttribute"/> for more details.
     /// </summary>
     [PublicAPI]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public class RequiredByDefaultAttribute : Attribute
     {
     }

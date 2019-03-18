@@ -8,14 +8,14 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// Specifies that settings of this type should be validated by a validator of provided type.
     /// </summary>
     [PublicAPI]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public class ValidateByAttribute : Attribute
     {
         /// <inheritdoc />
         /// <summary>
         /// Initializes a new instance of <see cref="T:Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute" /> class.
         /// </summary>
-        public ValidateByAttribute([NotNull] Type validatorType) => 
+        public ValidateByAttribute([NotNull] Type validatorType) =>
             ValidatorType = validatorType ?? throw new ArgumentNullException(nameof(validatorType));
 
         /// <summary>

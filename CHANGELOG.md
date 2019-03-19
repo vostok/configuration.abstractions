@@ -1,3 +1,7 @@
+## 0.1.6 (19-03-2019): 
+
+* `BindByAttribute`, `ValidateByAttribute` and `RequiredByDefaultAttribute` can now be applied to interfaces.
+
 ## 0.1.5 (01-03-2019): 
 
 * Minor fixes in string representation of tree nodes.

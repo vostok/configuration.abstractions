@@ -21,6 +21,12 @@ namespace Vostok.Configuration.Abstractions.Merging
         /// <summary>
         /// Produce an array containing unique items from both arrays. The order is the same as with <see cref="Concat"/>. For duplicate items, the first one is kept.
         /// </summary>
-        Union
+        Union,
+
+        /// <summary>
+        /// <para>Produce an array containing items obtained by merging corresponding items (by index) from both arrays.</para>
+        /// <para>If merged arrays have different items count, the "tail" of the longer array is preserved as-is.</para>
+        /// </summary>
+        PerElement
     }
 }

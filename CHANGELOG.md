@@ -1,3 +1,7 @@
+## 0.1.7 (19-03-2019): 
+
+* Implemented 'PerElement' array merge style (https://github.com/vostok/configuration/issues/16).
+
 ## 0.1.6 (19-03-2019): 
 
 * `BindByAttribute`, `ValidateByAttribute` and `RequiredByDefaultAttribute` can now be applied to interfaces.

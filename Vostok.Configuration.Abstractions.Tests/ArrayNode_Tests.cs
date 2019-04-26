@@ -54,9 +54,10 @@ namespace Vostok.Configuration.Abstractions.Tests
             merge.Children.First().Value.Should().Be("x1");
         }
 
-        [TestCase(ArrayMergeStyle.Replace, TestName = "Replace option")]
-        [TestCase(ArrayMergeStyle.Concat, TestName = "Concat option")]
-        [TestCase(ArrayMergeStyle.Union, TestName = "Union option")]
+        [TestCase(ArrayMergeStyle.Replace)]
+        [TestCase(ArrayMergeStyle.Concat)]
+        [TestCase(ArrayMergeStyle.Union)]
+        [TestCase(ArrayMergeStyle.PerElement)]
         public void Should_merge_with_different_options(ArrayMergeStyle style)
         {
             var sets1 = Array(null, "x1", "x2", "x3");
@@ -66,6 +67,7 @@ namespace Vostok.Configuration.Abstractions.Tests
             switch (style)
             {
                 case ArrayMergeStyle.Replace:
+                case ArrayMergeStyle.PerElement:
                     merge.Children.Select(c => c.Value).Should().Equal("x1", "x4", "x5");
                     break;
                 case ArrayMergeStyle.Concat:
@@ -75,6 +77,37 @@ namespace Vostok.Configuration.Abstractions.Tests
                     merge.Children.Select(c => c.Value).Should().Equal("x1", "x2", "x3", "x4", "x5");
                     break;
             }
+        }
+
+        [Test]
+        public void Should_merge_arrays_of_object_nodes_with_per_element_merge_style()
+        {
+            var array1 = Array("array1", 
+                Object(null, ("A", "1")), 
+                Object(null, ("A", "2")), 
+                Object(null, ("A", "3")));
+
+            var array2 = Array("array2",
+                Object(null, ("B", "2")),
+                Object(null, ("B", "1")));
+
+            var options = new SettingsMergeOptions
+            {
+                ArrayMergeStyle = ArrayMergeStyle.PerElement,
+                ObjectMergeStyle = ObjectMergeStyle.Deep
+            };
+
+            array1.Merge(array2, options).Should().Be(Array("array2",
+                Object(null, ("A", "1"), ("B", "2")),
+                Object(null, ("A", "2"), ("B", "1")),
+                Object(null, ("A", "3")))
+            );
+
+            array2.Merge(array1, options).Should().Be(Array("array1",
+                Object(null, ("A", "1"), ("B", "2")),
+                Object(null, ("A", "2"), ("B", "1")),
+                Object(null, ("A", "3")))
+            );
         }
 
         [Test]

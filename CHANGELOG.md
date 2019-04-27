@@ -1,4 +1,8 @@
-## 0.1.7 (19-03-2019): 
+## 0.1.8 (27-04-2019): 
+
+* Allowed to apply SecretAttribute to classes and interfaces.
+
+## 0.1.7 (26-04-2019): 
 
 * Implemented 'PerElement' array merge style (https://github.com/vostok/configuration/issues/16).
 

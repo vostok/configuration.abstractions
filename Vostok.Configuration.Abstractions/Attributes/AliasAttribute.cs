@@ -3,11 +3,15 @@ using JetBrains.Annotations;
 
 namespace Vostok.Configuration.Abstractions.Attributes
 {
+    /// <summary>
+    /// <para>When applied to a field or property on the model, provides an alternative key to look up in <see cref="ISettingsNode"/>s structure when binding from a settings tree.</para>
+    /// <para>By default, field and property names in the model are used as lookup keys.</para>
+    /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public class AliasAttribute : Attribute
     {
-        public AliasAttribute(string value)
+        public AliasAttribute([NotNull] string value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -18,6 +22,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
             Value = value;
         }
 
+        [NotNull]
         public string Value { get; }
     }
 }

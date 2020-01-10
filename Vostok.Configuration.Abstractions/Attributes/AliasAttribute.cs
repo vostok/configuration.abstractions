@@ -13,7 +13,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
                 throw new ArgumentNullException(nameof(value));
 
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Alias value cannot be empty or contains only whitespace characters", nameof(value));
+                throw new ArgumentException("Alias value cannot be empty or contain only whitespace characters", nameof(value));
 
             Value = value;
         }

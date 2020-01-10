@@ -1,3 +1,7 @@
+## 0.1.9 (10.01.2020):
+
+* Added `AliasAttribute` to provide an alternative to field/property names in model classes.
+
 ## 0.1.8 (27-04-2019): 
 
 * Allowed to apply SecretAttribute to classes and interfaces.

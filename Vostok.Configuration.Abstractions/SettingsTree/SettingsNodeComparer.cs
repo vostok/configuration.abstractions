@@ -9,6 +9,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     [PublicAPI]
     public class SettingsNodeComparer
     {
+        [NotNull]
         public static IReadOnlyList<IReadOnlyList<string>> FindDifferences(
             [CanBeNull] ISettingsNode left,
             [CanBeNull] ISettingsNode right)
@@ -56,7 +57,8 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             }
         }
 
-        private static Dictionary<string, ISettingsNode> ChildrenToDictionary([CanBeNull] ISettingsNode node)
+        private static Dictionary<string, ISettingsNode> ChildrenToDictionary(
+            [CanBeNull] ISettingsNode node)
         {
             if (node == null)
                 return new Dictionary<string, ISettingsNode>();

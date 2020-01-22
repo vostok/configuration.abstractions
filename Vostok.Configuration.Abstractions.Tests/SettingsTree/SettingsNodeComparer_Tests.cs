@@ -136,8 +136,7 @@ namespace Vostok.Configuration.Abstractions.Tests.SettingsTree
             SettingsNodeComparer.FindDifferences(left, right)
                 .Should()
                 .BeEquivalentTo(
-                    new[] {"root", "array"},
-                    new[] {"root", "array", "x"});
+                    new[] {new[] {"root", "array", "x"}});
         }
 
         [Test]
@@ -158,8 +157,7 @@ namespace Vostok.Configuration.Abstractions.Tests.SettingsTree
             SettingsNodeComparer.FindDifferences(left, right)
                 .Should()
                 .BeEquivalentTo(
-                    new[] {"root", "array"},
-                    new[] {"root", "array", "x"});
+                    new[] {new[] {"root", "array", "x"}});
         }
 
         [Test]
@@ -183,7 +181,6 @@ namespace Vostok.Configuration.Abstractions.Tests.SettingsTree
             SettingsNodeComparer.FindDifferences(left, right)
                 .Should()
                 .BeEquivalentTo(
-                    new[] {"root", "obj"},
                     new[] {"root", "obj", "prop1"},
                     new[] {"root", "obj", "prop2"});
         }

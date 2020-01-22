@@ -10,6 +10,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
     public class SettingsNodeComparer
     {
         [NotNull]
+        [ItemNotNull]
         public static IReadOnlyList<IReadOnlyList<string>> FindDifferences(
             [CanBeNull] ISettingsNode left,
             [CanBeNull] ISettingsNode right)
@@ -22,6 +23,14 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
             var different = new HashSet<Path>(new ListComparer<string>());
             Compare(new Path(), different, left, right);
+
+            foreach (var d in different.ToList())
+            {
+                for (var take = 0; take < d.Count; take++)
+                {
+                    different.Remove(d.Take(take).ToList());
+                }
+            }
 
             return different.ToList();
         }

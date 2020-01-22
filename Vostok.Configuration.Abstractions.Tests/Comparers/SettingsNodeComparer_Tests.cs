@@ -388,6 +388,30 @@ namespace Vostok.Configuration.Abstractions.Tests.Comparers
                 .BeFalse();
         }
 
+        [Test]
+        public void Should_exclude_with_null_root_name()
+        {
+            var left = Object(null, ("prop1", "value1"));
+
+            var right = Object(null, ("prop1", "value2"));
+
+            Equals(
+                    left,
+                    right)
+                .Should()
+                .BeFalse();
+
+            Equals(
+                    left,
+                    right,
+                    new SettingsCompareOptions
+                    {
+                        ExcludedPaths = new[] { new[] { "prop1" } }
+                    })
+                .Should()
+                .BeTrue();
+        }
+
         private static bool Equals(ISettingsNode left, ISettingsNode right, SettingsCompareOptions options = null) =>
             new SettingsNodeComparer(options).Equals(left, right);
     }

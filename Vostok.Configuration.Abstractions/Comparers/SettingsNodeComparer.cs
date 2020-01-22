@@ -30,7 +30,10 @@ namespace Vostok.Configuration.Abstractions.Comparers
             if (left?.Name != right?.Name)
                 return false;
 
-            return EquivalentInner(new List<string> {left?.Name}, left, right);
+            var path = new List<string>();
+            if (left?.Name != null)
+                path.Add(left?.Name);
+            return EquivalentInner(path, left, right);
         }
 
         private bool EquivalentInner(

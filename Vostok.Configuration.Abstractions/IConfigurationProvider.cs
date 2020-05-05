@@ -81,5 +81,17 @@ namespace Vostok.Configuration.Abstractions
         /// <para>Using this method after calling <see cref="Get{TSettings}()"/> or <see cref="Observe{TSettings}()"/> will fail with exception as dynamic reconfiguration of sources is not supported.</para>
         /// </summary>
         void SetupSourceFor<TSettings>([NotNull] IConfigurationSource source);
+
+        /// <summary>
+        /// <para>Attempts to set associate given <paramref name="source"/> with type <typeparamref name="TSettings"/>.</para>
+        /// <para>Returns <c>true</c> on success or <c>false</c> if a source has already been configured for this type.</para>
+        /// <para>See <see cref="SetupSourceFor{T}"/> for mor details.</para>
+        /// </summary>
+        bool TrySetupSourceFor<TSettings>([NotNull] IConfigurationSource source);
+
+        /// <summary>
+        /// Returns whether there is a source configured for <typeparamref name="TSettings"/>.
+        /// </summary>
+        bool HasSourceFor<TSettings>();
     }
 }

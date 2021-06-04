@@ -6,7 +6,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 {
     internal static class SettingsNodeRenderer
     {
-        private const string NullRepresentation = "<null>";
+        private const string NullRepresentation = "null";
         private const string OpeningSquareBracket = "[";
         private const string OpeningCurlyBracket = "{";
         private const string ClosingSquareBracket = "]";
@@ -30,11 +30,17 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         {
             switch (node)
             {
+                case ValueNode valueNode when valueNode.Value == null:
+                    builder
+                        .Indent(depth)
+                        .Append(NullRepresentation);
+                    break;
+                    
                 case ValueNode valueNode:
                     builder
                         .Indent(depth)
                         .Append(Quote)
-                        .Append(valueNode.Value ?? NullRepresentation)
+                        .Append(valueNode.Value)
                         .Append(Quote);
                     break;
 

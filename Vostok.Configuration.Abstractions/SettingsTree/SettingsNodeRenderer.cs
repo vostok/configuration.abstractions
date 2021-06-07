@@ -84,7 +84,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
                         var counter = 0;
 
-                        foreach (var child in objectNode.Children)
+                        foreach (var child in objectNode.Children.OrderBy(c => c.Name))
                         {
                             builder
                                 .Indent(depth + 1)

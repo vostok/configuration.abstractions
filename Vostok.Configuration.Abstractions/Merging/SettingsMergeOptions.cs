@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Vostok.Configuration.Abstractions.SettingsTree;
 
 namespace Vostok.Configuration.Abstractions.Merging
@@ -23,5 +24,8 @@ namespace Vostok.Configuration.Abstractions.Merging
         /// The way to merge array nodes.
         /// </summary>
         public ArrayMergeStyle ArrayMergeStyle { get; set; } = ArrayMergeStyle.Replace;
+
+        [CanBeNull]
+        public Func<ISettingsNode, ISettingsNode, (bool, ISettingsNode)> CustomMerge { get; set; }
     }
 }

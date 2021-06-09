@@ -7,7 +7,7 @@ using Vostok.Configuration.Abstractions.Merging;
 namespace Vostok.Configuration.Abstractions.SettingsTree
 {
     /// <summary>
-    /// A settings tree node representing a mapping of <see cref="String"/> keys to <see cref="ISettingsNode"/> values.
+    /// A settings tree node representing a mapping of <see cref="string"/> keys to <see cref="ISettingsNode"/> values.
     /// </summary>
     [PublicAPI]
     public sealed class ObjectNode : ISettingsNode, IEquatable<ObjectNode>
@@ -82,6 +82,15 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
         {
+            options = options ?? SettingsMergeOptions.Default;
+
+            if (options.CustomMerge != null)
+            {
+                var (ok, merged) = options.CustomMerge(this, other);
+                if (ok)
+                    return merged;
+            }
+
             if (other == null)
                 return this;
 
@@ -93,8 +102,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
 
             if (objectNodeOther.children.Count == 0)
                 return this;
-
-            options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ObjectMergeStyle)
             {
@@ -108,7 +115,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         }
 
         public override string ToString() => SettingsNodeRenderer.Render(this);
-        
+
         /// <summary>
         /// Returns a new <see cref="ObjectNodeBuilder"/> based on this <see cref="ObjectNode"/>'s contents.
         /// </summary>

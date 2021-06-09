@@ -50,13 +50,20 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
         /// <inheritdoc />
         public ISettingsNode Merge(ISettingsNode other, SettingsMergeOptions options = null)
         {
+            options = options ?? SettingsMergeOptions.Default;
+
+            if (options.CustomMerge != null)
+            {
+                var (ok, merged) = options.CustomMerge(this, other);
+                if (ok)
+                    return merged;
+            }
+
             if (other == null)
                 return this;
 
             if (!(other is ArrayNode otherArrayNode))
                 return other;
-
-            options = options ?? SettingsMergeOptions.Default;
 
             switch (options.ArrayMergeStyle)
             {
@@ -117,7 +124,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
             {
                 var nameHash = Name != null ? Comparers.NodeName.GetHashCode(Name) : 0;
 
-                return nameHash * 397 ^ children.Aggregate(children.Count, (current, element) => current * 397 ^ (element?.GetHashCode() ?? 0));
+                return (nameHash * 397) ^ children.Aggregate(children.Count, (current, element) => (current * 397) ^ (element?.GetHashCode() ?? 0));
             }
         }
 

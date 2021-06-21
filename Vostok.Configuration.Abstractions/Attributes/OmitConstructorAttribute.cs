@@ -10,7 +10,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Class)]
-    public class OmittedConstructorsAttribute : Attribute
+    public class OmitConstructorAttribute : Attribute
     {
     }
 }

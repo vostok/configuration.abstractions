@@ -1,3 +1,7 @@
+## 0.1.10 (23.06.2021):
+
+* Added `OmitConstructorsAttribute` to provide a way for constructorless binding.
+
 ## 0.1.9 (10.01.2020):
 
 * Added `AliasAttribute` to provide an alternative to field/property names in model classes.

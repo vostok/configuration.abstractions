@@ -35,7 +35,7 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                         .Indent(depth)
                         .Append(NullRepresentation);
                     break;
-                    
+
                 case ValueNode valueNode:
                     builder
                         .Indent(depth)
@@ -47,7 +47,6 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                 case ArrayNode arrayNode:
                     if (arrayNode.ChildrenCount > 0)
                     {
-
                         builder
                             .Indent(depth)
                             .AppendLine(OpeningSquareBracket);
@@ -68,10 +67,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                             .Indent(depth)
                             .Append(ClosingSquareBracket);
                     }
-                    else builder
-                        .Indent(depth)
-                        .Append(OpeningSquareBracket)
-                        .Append(ClosingSquareBracket);
+                    else
+                        builder
+                            .Indent(depth)
+                            .Append(OpeningSquareBracket)
+                            .Append(ClosingSquareBracket);
 
                     break;
 
@@ -114,10 +114,11 @@ namespace Vostok.Configuration.Abstractions.SettingsTree
                             .Indent(depth)
                             .Append(ClosingCurlyBracket);
                     }
-                    else builder
-                        .Indent(depth)
-                        .Append(OpeningCurlyBracket)
-                        .Append(ClosingCurlyBracket);
+                    else
+                        builder
+                            .Indent(depth)
+                            .Append(OpeningCurlyBracket)
+                            .Append(ClosingCurlyBracket);
 
                     break;
 

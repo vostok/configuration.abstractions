@@ -1,3 +1,9 @@
+## 0.1.11 (01.07.2021):
+
+* Added `CustomMerge` setting.
+
+
+
 ## 0.1.10 (23.06.2021):
 
 * Added `OmitConstructorsAttribute` to provide a way for constructorless binding.

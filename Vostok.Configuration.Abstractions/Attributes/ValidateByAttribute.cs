@@ -8,6 +8,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// Specifies that settings of this type should be validated by a validator of provided type.
     /// </summary>
     [PublicAPI]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
     public class ValidateByAttribute : Attribute
     {

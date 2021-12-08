@@ -8,6 +8,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// Specifies that settings in annotated type/field/property should be bound by an <see cref="ISettingsBinder{TSettings}"/> of provided type.
     /// </summary>
     [PublicAPI]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Field | AttributeTargets.Property)]
     public class BindByAttribute : Attribute
     {

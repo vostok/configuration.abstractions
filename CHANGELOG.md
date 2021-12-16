@@ -1,3 +1,7 @@
+## 0.1.13 (06-12-2021):
+
+Added `net6.0` target.
+
 ## 0.1.11 (01.07.2021):
 
 * Added `CustomMerge` setting.

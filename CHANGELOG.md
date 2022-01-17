@@ -1,3 +1,8 @@
+## 0.1.14 (17-01-2021):
+
+Made attributes suppress R# warning "property is unassigned".
+
+
 ## 0.1.13 (06-12-2021):
 
 Added `net6.0` target.

@@ -9,6 +9,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// <para>Useful for sensitive settings, such as API-keys, passwords and tokens.</para>
     /// </summary>
     [PublicAPI]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface)]
     public class SecretAttribute : Attribute
     {

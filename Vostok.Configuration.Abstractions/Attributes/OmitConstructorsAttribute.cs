@@ -11,6 +11,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// BindBy attribute has higher priority, so constructorless behaviour can be overriden on fields or properties.
     /// </summary>
     [PublicAPI]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class OmitConstructorsAttribute : Attribute
     {

@@ -9,6 +9,7 @@ namespace Vostok.Configuration.Abstractions.Attributes
     /// <para>By default, field and property names in the model are used as lookup keys.</para>
     /// </summary>
     [PublicAPI]
+    [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public class AliasAttribute : Attribute
     {

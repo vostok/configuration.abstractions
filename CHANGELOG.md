@@ -1,3 +1,8 @@
+## 0.1.15 (04.02.2022):
+
+Added `Comparers.NodeNameComparer`
+
+
 ## 0.1.14 (17-01-2021):
 
 Made attributes suppress R# warning "property is unassigned".

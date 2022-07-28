@@ -1,0 +1,111 @@
+override Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.Equals(object obj) -> bool
+override Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.GetHashCode() -> int
+override Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.ToString() -> string
+override Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.Equals(object obj) -> bool
+override Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.GetHashCode() -> int
+override Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ToString() -> string
+override Vostok.Configuration.Abstractions.SettingsTree.ValueNode.Equals(object obj) -> bool
+override Vostok.Configuration.Abstractions.SettingsTree.ValueNode.GetHashCode() -> int
+override Vostok.Configuration.Abstractions.SettingsTree.ValueNode.ToString() -> string
+static readonly Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.Default -> Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions
+static Vostok.Configuration.Abstractions.Extensions.Observable.ObservableExtensions.Subscribe<T>(this System.IObservable<T> source, System.Action<T> onNext) -> System.IDisposable
+static Vostok.Configuration.Abstractions.Extensions.Observable.ObservableExtensions.Subscribe<T>(this System.IObservable<T> source, System.Action<T> onNext, System.Action<System.Exception> onError) -> System.IDisposable
+static Vostok.Configuration.Abstractions.IConfigurationProviderExtensions.WithSourceFor<TSettings>(this Vostok.Configuration.Abstractions.IConfigurationProvider provider, Vostok.Configuration.Abstractions.IConfigurationSource source) -> Vostok.Configuration.Abstractions.IConfigurationProvider
+static Vostok.Configuration.Abstractions.SettingsTree.ISettingsNodeExtensions.ScopeTo(this Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode node, params string[] scope) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+static Vostok.Configuration.Abstractions.SettingsTree.ISettingsNodeExtensions.ScopeTo(this Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode node, System.Collections.Generic.IEnumerable<string> scope) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+static Vostok.Configuration.Abstractions.SettingsTree.SettingsNodeMerger.Merge(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode node1, Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode node2, Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions options) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.Attributes.AliasAttribute
+Vostok.Configuration.Abstractions.Attributes.AliasAttribute.AliasAttribute(string value) -> void
+Vostok.Configuration.Abstractions.Attributes.AliasAttribute.Value.get -> string
+Vostok.Configuration.Abstractions.Attributes.BindByAttribute
+Vostok.Configuration.Abstractions.Attributes.BindByAttribute.BindByAttribute(System.Type binderType) -> void
+Vostok.Configuration.Abstractions.Attributes.BindByAttribute.BinderType.get -> System.Type
+Vostok.Configuration.Abstractions.Attributes.OmitConstructorsAttribute
+Vostok.Configuration.Abstractions.Attributes.OmitConstructorsAttribute.OmitConstructorsAttribute() -> void
+Vostok.Configuration.Abstractions.Attributes.OptionalAttribute
+Vostok.Configuration.Abstractions.Attributes.OptionalAttribute.OptionalAttribute() -> void
+Vostok.Configuration.Abstractions.Attributes.RequiredAttribute
+Vostok.Configuration.Abstractions.Attributes.RequiredAttribute.RequiredAttribute() -> void
+Vostok.Configuration.Abstractions.Attributes.RequiredByDefaultAttribute
+Vostok.Configuration.Abstractions.Attributes.RequiredByDefaultAttribute.RequiredByDefaultAttribute() -> void
+Vostok.Configuration.Abstractions.Attributes.SecretAttribute
+Vostok.Configuration.Abstractions.Attributes.SecretAttribute.SecretAttribute() -> void
+Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute
+Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute.ValidateByAttribute(System.Type validatorType) -> void
+Vostok.Configuration.Abstractions.Attributes.ValidateByAttribute.ValidatorType.get -> System.Type
+Vostok.Configuration.Abstractions.Extensions.Observable.ObservableExtensions
+Vostok.Configuration.Abstractions.IConfigurationProvider
+Vostok.Configuration.Abstractions.IConfigurationProvider.Get<TSettings>() -> TSettings
+Vostok.Configuration.Abstractions.IConfigurationProvider.Get<TSettings>(Vostok.Configuration.Abstractions.IConfigurationSource source) -> TSettings
+Vostok.Configuration.Abstractions.IConfigurationProvider.Observe<TSettings>() -> System.IObservable<TSettings>
+Vostok.Configuration.Abstractions.IConfigurationProvider.Observe<TSettings>(Vostok.Configuration.Abstractions.IConfigurationSource source) -> System.IObservable<TSettings>
+Vostok.Configuration.Abstractions.IConfigurationProvider.SetupSourceFor<TSettings>(Vostok.Configuration.Abstractions.IConfigurationSource source) -> void
+Vostok.Configuration.Abstractions.IConfigurationProviderExtensions
+Vostok.Configuration.Abstractions.IConfigurationSource
+Vostok.Configuration.Abstractions.IConfigurationSource.Observe() -> System.IObservable<(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode settings, System.Exception error)>
+Vostok.Configuration.Abstractions.ISettingsBinder<TSettings>
+Vostok.Configuration.Abstractions.ISettingsBinder<TSettings>.Bind(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode rawSettings) -> TSettings
+Vostok.Configuration.Abstractions.ISettingsValidator<T>
+Vostok.Configuration.Abstractions.ISettingsValidator<T>.Validate(T settings) -> System.Collections.Generic.IEnumerable<string>
+Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle.Concat = 1 -> Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle.PerElement = 3 -> Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle.Replace = 0 -> Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle.Union = 2 -> Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle
+Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle.Deep = 0 -> Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle
+Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle.Shallow = 1 -> Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.ArrayMergeStyle.get -> Vostok.Configuration.Abstractions.Merging.ArrayMergeStyle
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.ArrayMergeStyle.set -> void
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.CustomMerge.get -> System.Func<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode, Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode, (bool, Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode)>
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.CustomMerge.set -> void
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.ObjectMergeStyle.get -> Vostok.Configuration.Abstractions.Merging.ObjectMergeStyle
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.ObjectMergeStyle.set -> void
+Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions.SettingsMergeOptions() -> void
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.ArrayNode(string name) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.ArrayNode(string name, System.Collections.Generic.IReadOnlyList<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode> children) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.ArrayNode(System.Collections.Generic.IReadOnlyList<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode> children) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.Children.get -> System.Collections.Generic.IEnumerable<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode>
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.ChildrenCount.get -> int
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.Equals(Vostok.Configuration.Abstractions.SettingsTree.ArrayNode other) -> bool
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.Merge(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode other, Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions options = null) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ArrayNode.Name.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode.Children.get -> System.Collections.Generic.IEnumerable<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode>
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode.Merge(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode other, Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions options = null) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode.Name.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode.this[string name].get -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode.Value.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ISettingsNodeExtensions
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.Children.get -> System.Collections.Generic.IEnumerable<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode>
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ChildrenCount.get -> int
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.Equals(Vostok.Configuration.Abstractions.SettingsTree.ObjectNode other) -> bool
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.Merge(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode other, Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions options = null) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.Name.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ObjectNode(string name) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ObjectNode(string name, System.Collections.Generic.IEnumerable<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode> children) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ObjectNode(System.Collections.Generic.ICollection<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode> children) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.this[string name].get -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNode.ToBuilder() -> Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.Build() -> Vostok.Configuration.Abstractions.SettingsTree.ObjectNode
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.ChildrenCount.get -> int
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.Name.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.Name.set -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.ObjectNodeBuilder() -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.ObjectNodeBuilder(string name) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.ObjectNodeBuilder(Vostok.Configuration.Abstractions.SettingsTree.ObjectNode node) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.RemoveChild(string name) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.SetChild(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode child) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ObjectNodeBuilder.this[string name].get -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.SettingsNodeMerger
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.Equals(Vostok.Configuration.Abstractions.SettingsTree.ValueNode other) -> bool
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.Merge(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode other, Vostok.Configuration.Abstractions.Merging.SettingsMergeOptions options = null) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.Name.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.Value.get -> string
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.ValueNode(string name, string value) -> void
+Vostok.Configuration.Abstractions.SettingsTree.ValueNode.ValueNode(string value) -> void

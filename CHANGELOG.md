@@ -1,3 +1,7 @@
+## 0.1.16 (09-12-2024): 
+
+Bump NuGet deps versions
+
 ## 0.1.15 (04.02.2022):
 
 Added `Comparers.NodeNameComparer`

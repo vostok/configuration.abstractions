@@ -42,6 +42,4 @@ full-build > notests:
             - Vostok.Configuration.Abstractions/bin/Release/net8.0/Vostok.Configuration.Abstractions.dll
 
   deps:
-    - -vostok.devtools
-    - vostok.devtools@with-net6.0
     - vostok.commons.testing/src
